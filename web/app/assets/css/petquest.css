@@ -1,0 +1,7 @@
+
+.petquest-header{
+    content: url("../img/petquest-logo.png");
+    margin: 0 auto;
+    height: 32px;
+    padding-top: 8px;
+}
