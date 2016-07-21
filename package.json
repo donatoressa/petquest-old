@@ -2,13 +2,21 @@
   "name": "petquest",
   "version": "0.0.1",
   "description": "Midia social para anuncios de animais encontrados e perdidos.",
-  "author": "Donato Ressa.",
+  "author": "Donato Ressa",
   "license": "ISC",
   "dependencies": {
     "angular": "1.5.3",
-    "angular-ui-router": "1.0.0-alpha.3"
+    "angular-animate": "^1.5.7",
+    "angular-translate": "^2.11.1",
+    "angular-ui-router": "1.0.0-alpha.3",
+    "express": "^4.14.0",
+    "oclazyload": "^1.0.9"
   },
   "devDependencies": {
-    
+    "angular-local-storage": "^0.2.7",
+    "eslint": "^3.1.1",
+    "express": "^4.14.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1"
   }
 }
