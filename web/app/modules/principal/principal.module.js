@@ -3,8 +3,7 @@
     "use strict";
 
     angular.module("petquest.principal", [
-        "ngAnimate",
-        "oc.lazyLoad",
+        //"ngAnimate",
         "ui.router",
         "LocalStorageModule"
     ]).config(configuracao)
@@ -20,6 +19,7 @@
 
     function execucao() {
         console.log("Módulo principal executado.");
+
     }
 
 })();
