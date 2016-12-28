@@ -2,24 +2,28 @@
 
     "use strict";
 
-    angular.module("petquest.principal", [
-        //"ngAnimate",
-        "ui.router",
-        "LocalStorageModule"
-    ]).config(configuracao)
+    angular.module("petquest.principal", ["ui.router", "ui.bootstrap"])
+        .config(configuracao)
         .run(execucao);
 
-    configuracao.$inject = ["localStorageServiceProvider"];
+    configuracao.$inject = ["$stateProvider", "$urlRouterProvider"];
 
-    function configuracao(localStorageServiceProvider) {
-        localStorageServiceProvider.setStorageType("local");
-        localStorageServiceProvider.setStorageCookie(0);
+    function configuracao($stateProvider, $urlRouterProvider) {
+
+        $urlRouterProvider.otherwise("/");
+
+        $stateProvider
+            .state("home", {
+                url: "/",
+                templateUrl: "app/modules/principal/views/main.html",
+                controller: "principalController as pCtrl"
+            });
+
         console.log("Módulo principal configurado.");
     }
 
     function execucao() {
         console.log("Módulo principal executado.");
-
     }
 
 })();
