@@ -2,19 +2,15 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["ui.router", "ui.bootstrap", "LocalStorageModule"])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", ])
         .config(configuracao)
         .run(execucao);
 
-    configuracao.$inject = ["$stateProvider", "$urlRouterProvider", "localStorageServiceProvider"];
+    configuracao.$inject = ["$stateProvider", "$urlRouterProvider"];
 
-    function configuracao($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
-
-        localStorageServiceProvider.setPrefix("petquest");
-        localStorageServiceProvider.setStorageType("sessionStorage");
+    function configuracao($stateProvider, $urlRouterProvider){
 
         $urlRouterProvider.otherwise("/");
-
         $stateProvider
             .state("home", {
                 url: "/home",

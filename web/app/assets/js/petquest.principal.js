@@ -2,19 +2,15 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["ui.router", "ui.bootstrap", "LocalStorageModule"])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", ])
         .config(configuracao)
         .run(execucao);
 
-    configuracao.$inject = ["$stateProvider", "$urlRouterProvider", "localStorageServiceProvider"];
+    configuracao.$inject = ["$stateProvider", "$urlRouterProvider"];
 
-    function configuracao($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
-
-        localStorageServiceProvider.setPrefix("petquest");
-        localStorageServiceProvider.setStorageType("sessionStorage");
+    function configuracao($stateProvider, $urlRouterProvider){
 
         $urlRouterProvider.otherwise("/");
-
         $stateProvider
             .state("home", {
                 url: "/home",
@@ -35,32 +31,51 @@
     }
 
 })();
+
+(function () {
+
+    "use strict";
+
+    angular.module("petquest.principal").constant("appSettings", {
+        comunicacao: {
+            apis: "http://localhost:3000"
+        }
+    });
+
+})();
 (function(){
     "use strict";
 
     angular.module("petquest.principal").controller("principalController", principalController);
 
-    principalController.$inject = ["localStorageService"];
+    principalController.$inject = ["$state", "login"];
 
-    function principalController(localStorageService){
+    function principalController($state, login){
         var vm = this;
         var lembrarLogin = false;
         
-        vm.login = login;
+        vm.autenticar = autenticar;
         vm.lembrar = lembrarLogin;
+        vm.mensagemErro = "";
 
-        function login(usuario, senha){
+        function autenticar(email, senha){
             //API DE LOGIN
             if(lembrarLogin){
-                localStorageService.set(usuario, senha);
+                // localStorageService.set(usuario, senha);
             }
+
+            login.autenticar(email,senha)
+            .then(function(sucesso){
+                $state.go("home");
+            },
+            function(erro){
+                vm.mensagemErro = erro.mensagem;
+            });
         }
 
         function lembrarLogin(){
             lembrarLogin = !lembrarLogin;
         }
-
-
     }
 
 })();
@@ -82,3 +97,36 @@ angular
         }
     };
 }]);
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("login", login);
+    login.$inject = ["$http", "appSettings", "interpretador"];
+
+    function login($http, appSettings, interpretador) {
+        return {
+            autenticar: autenticar
+        };
+
+        function autenticar(email, senha) {
+
+            var caminho = appSettings.comunicacao.apis + "/autenticar";
+            var dados = { "email": email, "senha": senha };
+            var header = {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
+            };
+            var config = {
+                method: "post",
+                url: caminho,
+                data: dados,
+                headers: header
+            };
+
+            return interpretador.executarRequisicao(config)
+                .then(function (dados) {
+                    return dados.data;
+                });
+        }
+    }
+})();

@@ -107,8 +107,8 @@ gulp.task("build", [
     // "limpar-diretorio-output-img",
     "consolidar-dependencias",
     "consolidar-estilos-dependencia",
-    "copiar-estilos",
     "consolidar-modulos",
+    "copiar-estilos",
     // "copiar-angular",
     // "copiar-ui-bootstrap",
     "analise-estatica"

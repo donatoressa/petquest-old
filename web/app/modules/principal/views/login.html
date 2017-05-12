@@ -20,10 +20,10 @@
             </div>
         </div>
         <div class="form-group">
-            <span class="glyphicon glyphicon-log-in" aria-hidden="true" ng-click="pCtrl.login(pCtrl.usuario, pCtrl.senha)"></span>
+            <span class="glyphicon glyphicon-log-in" aria-hidden="true" ng-click="pCtrl.autenticar(pCtrl.usuario, pCtrl.senha)"></span>
         </div>
     </div>
-    <!--<label class="label-login"> Ou </label><br/>-->
+    <label class="label-erro" ng-model="pCtrl.mensagemErro" nf-if="pCtrl.mensagemErro != ''"></label><br/>
 
     <div class="well ajuste">
         <div class="facebook">

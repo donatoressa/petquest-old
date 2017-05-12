@@ -3,27 +3,34 @@
 
     angular.module("petquest.principal").controller("principalController", principalController);
 
-    principalController.$inject = ["localStorageService"];
+    principalController.$inject = ["$state", "login"];
 
-    function principalController(localStorageService){
+    function principalController($state, login){
         var vm = this;
         var lembrarLogin = false;
         
-        vm.login = login;
+        vm.autenticar = autenticar;
         vm.lembrar = lembrarLogin;
+        vm.mensagemErro = "";
 
-        function login(usuario, senha){
+        function autenticar(email, senha){
             //API DE LOGIN
             if(lembrarLogin){
-                localStorageService.set(usuario, senha);
+                // localStorageService.set(usuario, senha);
             }
+
+            login.autenticar(email,senha)
+            .then(function(sucesso){
+                $state.go("home");
+            },
+            function(erro){
+                vm.mensagemErro = erro.mensagem;
+            });
         }
 
         function lembrarLogin(){
             lembrarLogin = !lembrarLogin;
         }
-
-
     }
 
 })();
