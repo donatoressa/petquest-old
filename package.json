@@ -13,6 +13,7 @@
     "angular-ui-bootstrap": "^2.5.0",
     "angular-ui-router": "1.0.0-alpha.3",
     "express": "^4.14.0",
+    "ngmap": "^1.18.4",
     "oclazyload": "^1.0.9",
     "ui-bootstrap": "^0.1.6"
   },

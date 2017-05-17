@@ -19,13 +19,13 @@
                 // localStorageService.set(usuario, senha);
             }
 
-            login.autenticar(email,senha)
-            .then(function(sucesso){
+            // login.autenticar(email,senha)
+            // .then(function(sucesso){
                 $state.go("home");
-            },
-            function(erro){
-                vm.mensagemErro = erro.mensagem;
-            });
+            // },
+            // function(erro){
+            //     vm.mensagemErro = erro.mensagem;
+            // });
         }
 
         function lembrarLogin(){

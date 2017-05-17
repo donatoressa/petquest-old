@@ -2,7 +2,7 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", ])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap"])
         .config(configuracao)
         .run(execucao);
 
@@ -15,7 +15,7 @@
             .state("home", {
                 url: "/home",
                 templateUrl: "app/modules/principal/views/main.html",
-                controller: "principalController as pCtrl"
+                controller: "homeController as hCtrl"
             })
             .state("login", {
                 url: "/",
@@ -43,6 +43,32 @@
     });
 
 })();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").controller("homeController", homeController);
+
+    homeController.$inject = ["NgMap"];
+
+    function homeController(NgMap) {
+
+        var vm = this;
+
+        // NgMap.getMap().then(function (map) {
+        //     console.log(map.getCenter());
+        //     console.log('markers', map.markers);
+        //     console.log('shapes', map.shapes);
+        // });
+        NgMap.getMap("map").then(function (map) {
+            vm.map = map;
+        });
+        vm.callbackFunc = function (param) {
+            console.log('I know where ' + param + ' are. ' + vm.message);
+            console.log('You are at' + vm.map.getCenter());
+        };
+    }
+
+})();
 (function(){
     "use strict";
 
@@ -64,13 +90,13 @@
                 // localStorageService.set(usuario, senha);
             }
 
-            login.autenticar(email,senha)
-            .then(function(sucesso){
+            // login.autenticar(email,senha)
+            // .then(function(sucesso){
                 $state.go("home");
-            },
-            function(erro){
-                vm.mensagemErro = erro.mensagem;
-            });
+            // },
+            // function(erro){
+            //     vm.mensagemErro = erro.mensagem;
+            // });
         }
 
         function lembrarLogin(){

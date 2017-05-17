@@ -2,7 +2,7 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", ])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap"])
         .config(configuracao)
         .run(execucao);
 
@@ -15,7 +15,7 @@
             .state("home", {
                 url: "/home",
                 templateUrl: "app/modules/principal/views/main.html",
-                controller: "principalController as pCtrl"
+                controller: "homeController as hCtrl"
             })
             .state("login", {
                 url: "/",

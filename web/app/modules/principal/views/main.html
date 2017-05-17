@@ -1,24 +1,9 @@
 <div>
-    
-    
-
     <div class="navbar navbar-inverse" role="navigation">
         <div class="img-responsive text-center">PetQuest</div>
     </div>
-    <div class="mapa" id="map"></div>
-        <script>
-            function initMap() {
-                var uluru = {lat: -25.363, lng: 131.044};
-                var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 4,
-                center: uluru
-                });
-                var marker = new google.maps.Marker({
-                position: uluru,
-                map: map
-                });
-            }
-        </script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDF9pqMzhMFV8QH-BsNoA_HyaJ56Qok36w&callback=initMap">
-</script>
+    <div>
+        <!--<ng-map class="mapa" center="[40.74, -74.18]" default-style="false"></ng-map>-->
+        <ng-map id="map" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="vm.callbackFunc('you')"></ng-map>
+    </div>
 </div>
