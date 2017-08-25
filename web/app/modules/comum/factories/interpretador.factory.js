@@ -12,9 +12,9 @@
 
         function executarRequisicao(configRequest){
 
-            var config = {
-                method: "OPTIONS",
+            var configPreflight = {
                 url: configRequest.url,
+                method: "OPTIONS",
                 headers: {
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "POST, GET, PUT, OPTIONS",
@@ -23,7 +23,7 @@
                 }
             };
 
-            return $http(config).then(function(retornoPreflight){
+            return $http(configPreflight).then(function(retornoPreflight){
                 $http(configRequest).then(function(retornoRequest){
                     return retornoRequest;
                 });

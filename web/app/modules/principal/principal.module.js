@@ -8,7 +8,7 @@
 
     configuracao.$inject = ["$stateProvider", "$urlRouterProvider"];
 
-    function configuracao($stateProvider, $urlRouterProvider){
+    function configuracao($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise("/");
         $stateProvider

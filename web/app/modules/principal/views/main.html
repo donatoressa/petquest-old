@@ -1,9 +1,22 @@
-<div>
-    <div class="navbar navbar-inverse" role="navigation">
-        <div class="img-responsive text-center">PetQuest</div>
-    </div>
-    <div>
-        <!--<ng-map class="mapa" center="[40.74, -74.18]" default-style="false"></ng-map>-->
-        <ng-map id="map" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="vm.callbackFunc('you')"></ng-map>
-    </div>
+<div class="main">
+    <nav class="navbar navbar-default ">
+        <div class="navbar-petquest">
+            <ul class="navbar-nav">
+                <li class="texto-navbar">
+                    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                </li>
+                <li class="col-md-2 texto-navbar titulo">
+                    <span> Pet Quest </span>
+                </li>
+                <li class="col-md-2 texto-navbar">
+                    <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="mapa">
+    <ng-map id="map" class="mapa" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="vm.callbackFunc('you')"
+        default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }"></ng-map>
+</div>
 </div>

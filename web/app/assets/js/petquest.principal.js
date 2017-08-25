@@ -8,7 +8,7 @@
 
     configuracao.$inject = ["$stateProvider", "$urlRouterProvider"];
 
-    function configuracao($stateProvider, $urlRouterProvider){
+    function configuracao($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise("/");
         $stateProvider
@@ -53,12 +53,9 @@
     function homeController(NgMap) {
 
         var vm = this;
+        vm.carregarEventos = carregarEventos;
+        vm.abrirMenu = abrirMenu;
 
-        // NgMap.getMap().then(function (map) {
-        //     console.log(map.getCenter());
-        //     console.log('markers', map.markers);
-        //     console.log('shapes', map.shapes);
-        // });
         NgMap.getMap("map").then(function (map) {
             vm.map = map;
         });
@@ -66,41 +63,89 @@
             console.log('I know where ' + param + ' are. ' + vm.message);
             console.log('You are at' + vm.map.getCenter());
         };
+
+        function carregarEventos(){
+
+        }
+
+        function abrirMenu(){
+            
+        }
     }
 
 })();
-(function(){
+(function () {
     "use strict";
 
     angular.module("petquest.principal").controller("principalController", principalController);
 
     principalController.$inject = ["$state", "login"];
 
-    function principalController($state, login){
+    function principalController($state, login) {
         var vm = this;
+        vm.exibirOpcoesLogin = true;
+        vm.loginEmailSelecionado = false;
+        vm.loginFacebookSelecionado = false;
+        vm.loginRegistroSelecionado = false;
+
         var lembrarLogin = false;
-        
+
         vm.autenticar = autenticar;
         vm.lembrar = lembrarLogin;
         vm.mensagemErro = "";
+        vm.opcaoLoginSelecionada = opcaoLoginSelecionada;
+        vm.voltarInicio = voltarInicio;
 
-        function autenticar(email, senha){
+        function autenticar(tipoLogin) {
             //API DE LOGIN
-            if(lembrarLogin){
+            if (lembrarLogin) {
                 // localStorageService.set(usuario, senha);
             }
 
-            // login.autenticar(email,senha)
-            // .then(function(sucesso){
-                $state.go("home");
-            // },
-            // function(erro){
-            //     vm.mensagemErro = erro.mensagem;
-            // });
+            if (tipoLogin === 0) {
+                if (vm.email && vm.senha) {
+                    login.autenticar(vm.email, vm.senha)
+                        .then(function (sucesso) {
+                            $state.go("home");
+                        })
+                        .catch(function (erro) {
+                            vm.mensagemErro = erro.mensagem;
+                        });
+                }
+            }
+            else{
+
+            }
         }
 
-        function lembrarLogin(){
+        function lembrarLogin() {
             lembrarLogin = !lembrarLogin;
+        }
+
+        function opcaoLoginSelecionada(opcao) {
+            if (opcao === 0) {
+                vm.loginEmailSelecionado = true;
+                vm.loginFacebookSelecionado = false;
+                vm.loginRegistroSelecionado = false;
+            }
+            else if (opcao === 1) {
+                vm.loginEmailSelecionado = false;
+                vm.loginFacebookSelecionado = true;
+                vm.loginRegistroSelecionado = false;
+            }
+            else {
+                vm.loginEmailSelecionado = false;
+                vm.loginFacebookSelecionado = false;
+                vm.loginRegistroSelecionado = true;
+            }
+            vm.exibirOpcoesLogin = false;
+        }
+
+        function voltarInicio() {
+            vm.loginEmailSelecionado = false;
+            vm.loginFacebookSelecionado = false;
+            vm.loginRegistroSelecionado = false;
+            vm.exibirOpcoesLogin = true;
         }
     }
 
@@ -139,7 +184,7 @@ angular
             var caminho = appSettings.comunicacao.apis + "/autenticar";
             var dados = { "email": email, "senha": senha };
             var header = {
-                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Origin": true,
                 "Content-Type": "application/json"
             };
             var config = {
@@ -149,10 +194,7 @@ angular
                 headers: header
             };
 
-            return interpretador.executarRequisicao(config)
-                .then(function (dados) {
-                    return dados.data;
-                });
+            return interpretador.executarRequisicao(config);
         }
     }
 })();

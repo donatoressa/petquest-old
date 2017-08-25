@@ -8,12 +8,9 @@
     function homeController(NgMap) {
 
         var vm = this;
+        vm.carregarEventos = carregarEventos;
+        vm.abrirMenu = abrirMenu;
 
-        // NgMap.getMap().then(function (map) {
-        //     console.log(map.getCenter());
-        //     console.log('markers', map.markers);
-        //     console.log('shapes', map.shapes);
-        // });
         NgMap.getMap("map").then(function (map) {
             vm.map = map;
         });
@@ -21,6 +18,14 @@
             console.log('I know where ' + param + ' are. ' + vm.message);
             console.log('You are at' + vm.map.getCenter());
         };
+
+        function carregarEventos(){
+
+        }
+
+        function abrirMenu(){
+            
+        }
     }
 
 })();

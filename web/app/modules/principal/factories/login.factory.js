@@ -14,7 +14,7 @@
             var caminho = appSettings.comunicacao.apis + "/autenticar";
             var dados = { "email": email, "senha": senha };
             var header = {
-                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Origin": true,
                 "Content-Type": "application/json"
             };
             var config = {
@@ -24,10 +24,7 @@
                 headers: header
             };
 
-            return interpretador.executarRequisicao(config)
-                .then(function (dados) {
-                    return dados.data;
-                });
+            return interpretador.executarRequisicao(config);
         }
     }
 })();
