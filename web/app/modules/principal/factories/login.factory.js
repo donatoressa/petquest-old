@@ -2,9 +2,9 @@
     "use strict";
 
     angular.module("petquest.principal").factory("login", login);
-    login.$inject = ["$http", "appSettings", "interpretador"];
+    login.$inject = ["appSettings", "interpretador"];
 
-    function login($http, appSettings, interpretador) {
+    function login(appSettings, interpretador) {
         return {
             autenticar: autenticar
         };

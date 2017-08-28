@@ -2,7 +2,7 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap"])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit"])
         .config(configuracao)
         .run(execucao);
 
@@ -79,66 +79,83 @@
 
     angular.module("petquest.principal").controller("principalController", principalController);
 
-    principalController.$inject = ["$state", "login"];
+    principalController.$inject = ["$state", "login", "registro"];
 
-    function principalController($state, login) {
+    function principalController($state, login, registro) {
         var vm = this;
         vm.exibirOpcoesLogin = true;
         vm.loginEmailSelecionado = false;
         vm.loginFacebookSelecionado = false;
         vm.loginRegistroSelecionado = false;
-
-        var lembrarLogin = false;
+        vm.processando = false;
+        vm.mensagemErro = "";
+        vm.lembrarEmail = false;
 
         vm.autenticar = autenticar;
-        vm.lembrar = lembrarLogin;
-        vm.mensagemErro = "";
+        vm.registrar = registrar;
         vm.opcaoLoginSelecionada = opcaoLoginSelecionada;
         vm.voltarInicio = voltarInicio;
+        vm.esqueciSenha = esqueciSenha;
 
         function autenticar(tipoLogin) {
             //API DE LOGIN
-            if (lembrarLogin) {
+            if (vm.lembrarEmail) {
                 // localStorageService.set(usuario, senha);
             }
 
             if (tipoLogin === 0) {
                 if (vm.email && vm.senha) {
+                    vm.processando = true;
                     login.autenticar(vm.email, vm.senha)
                         .then(function (sucesso) {
+                            vm.mensagemErro = "";
+                            vm.processando = false;
                             $state.go("home");
                         })
                         .catch(function (erro) {
-                            vm.mensagemErro = erro.mensagem;
+                            vm.mensagemErro = "Erro ao autenticar usuário.";
+                            vm.processando = false;
                         });
                 }
+                else {
+                    vm.emailObrigatorio = vm.email ? false : true;
+                    vm.senhaObrigatorio = vm.senha ? false : true;
+                    vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
+                }
             }
-            else{
+            else {
 
             }
-        }
-
-        function lembrarLogin() {
-            lembrarLogin = !lembrarLogin;
         }
 
         function opcaoLoginSelecionada(opcao) {
             if (opcao === 0) {
+                vm.exibirOpcoesLogin = false;
                 vm.loginEmailSelecionado = true;
                 vm.loginFacebookSelecionado = false;
                 vm.loginRegistroSelecionado = false;
+                vm.email = "";
+                vm.senha = "";
             }
             else if (opcao === 1) {
+                vm.exibirOpcoesLogin = false;
                 vm.loginEmailSelecionado = false;
                 vm.loginFacebookSelecionado = true;
                 vm.loginRegistroSelecionado = false;
+                vm.email = "";
+                vm.senha = "";
             }
             else {
+                vm.exibirOpcoesLogin = false;
                 vm.loginEmailSelecionado = false;
                 vm.loginFacebookSelecionado = false;
                 vm.loginRegistroSelecionado = true;
+                vm.nome = "";
+                vm.telefone = "";
+                vm.email = "";
+                vm.senha = "";
+                vm.confirmacaoSenha = "";
             }
-            vm.exibirOpcoesLogin = false;
         }
 
         function voltarInicio() {
@@ -146,6 +163,44 @@
             vm.loginFacebookSelecionado = false;
             vm.loginRegistroSelecionado = false;
             vm.exibirOpcoesLogin = true;
+            vm.mensagemErro = "";
+            vm.mensagemErroRegistro = "";
+            vm.nomeObrigatorio = false;
+            vm.telefoneObrigatorio = false;
+            vm.emailObrigatorio = false;
+            vm.senhaObrigatorio = false;
+            vm.confirmacaoSenhaObrigatorio = false;
+        }
+
+        function esqueciSenha() {
+
+        }
+
+        function registrar() {
+            if (vm.nome && vm.telefone && vm.email && vm.senha && vm.confirmacaoSenha) {
+                if (vm.senha === vm.confirmacaoSenha) {
+                    vm.processando = true;
+                    registro.registrar(vm.nome, vm.telefone, vm.email, vm.senha)
+                        .then(function (sucesso) {
+                            vm.processando = false;
+                        })
+                        .catch(function (erro) {
+                            vm.mensagemErroRegistro = "Erro ao registrar usuário.";
+                            vm.processando = false;
+                        });
+                }
+                else {
+                    vm.mensagemErroRegistro = "Confirmação de senha divergente da senha.";
+                }
+            }
+            else {
+                vm.mensagemErroRegistro = "Um ou mais campos obrigatórios não foram preenchidos.";
+                vm.nomeObrigatorio = vm.nome ? false : true;
+                vm.telefoneObrigatorio = vm.telefone ? false : true;
+                vm.emailObrigatorio = vm.email ? false : true;
+                vm.senhaObrigatorio = vm.senha ? false : true;
+                vm.confirmacaoSenhaObrigatorio = vm.confirmacaoSenha ? false : true;
+            }
         }
     }
 
@@ -172,9 +227,9 @@ angular
     "use strict";
 
     angular.module("petquest.principal").factory("login", login);
-    login.$inject = ["$http", "appSettings", "interpretador"];
+    login.$inject = ["appSettings", "interpretador"];
 
-    function login($http, appSettings, interpretador) {
+    function login(appSettings, interpretador) {
         return {
             autenticar: autenticar
         };
@@ -183,6 +238,41 @@ angular
 
             var caminho = appSettings.comunicacao.apis + "/autenticar";
             var dados = { "email": email, "senha": senha };
+            var header = {
+                "Access-Control-Allow-Origin": true,
+                "Content-Type": "application/json"
+            };
+            var config = {
+                method: "post",
+                url: caminho,
+                data: dados,
+                headers: header
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("registro", registro);
+    registro.$inject = ["appSettings", "interpretador"];
+
+    function registro(appSettings, interpretador) {
+        return {
+            registrar: registrar
+        };
+
+        function registrar(nome, telefone, email, senha) {
+
+            var caminho = appSettings.comunicacao.apis + "/registrar-usuario";
+            var dados = { 
+                nome: nome,
+                telefone: telefone,
+                email: email, 
+                senha: senha 
+            };
             var header = {
                 "Access-Control-Allow-Origin": true,
                 "Content-Type": "application/json"

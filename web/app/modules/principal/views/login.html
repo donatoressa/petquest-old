@@ -1,74 +1,115 @@
 <!--<splash-screen>
 </splash-screen>-->
+<div class="loader" ng-show="pCtrl.processando">
+    <three-bounce-spinner></three-bounce-spinner>
+</div>
 <div class="main">
-    <!--<img class="logo" src="./app/assets/img/logo2.jpg" />-->
-    <div style="height: 300px">
+
+    <div class="logo">
         <img src="" />
     </div>
-    
     <center>
-    <div ng-show="pCtrl.exibirOpcoesLogin">
-        <div>
-            <button class="login-email" ng-click="pCtrl.opcaoLoginSelecionada(0)">
-                <div>
-                    <span class="glyphicon glyphicon-envelope icone-botao" aria-hidden="true"></span>
-                    <span>Entrar com o e-mail</span>
-                </div>
+
+        <div ng-show="pCtrl.exibirOpcoesLogin">
+            <div>
+                <button class="login-email" ng-click="pCtrl.opcaoLoginSelecionada(0)">
+                    <div>
+                        <span class="glyphicon glyphicon-envelope icone-botao" aria-hidden="true"></span>
+                        <span>Entrar com o e-mail</span>
+                    </div>
+                </button>
+            </div>
+            <div class="login-separador">
+                <span class="texto-login">ou</span>
+            </div>
+            <div>
+                <button class="login-facebook" ng-click="pCtrl.opcaoLoginSelecionada(1)">
+                    <div >
+                        <img src="./app/assets/img/facebook-6-32.png" class="fb-icon"/>
+                        <span>Entrar com o facebook</span>
+                    </div>
+                </button>
+            </div>
+            <div class="painel-mensagem-registro">
+                <span class="texto-login">Não possui uma conta?</span>
+                <br/>
+            </div>
+            <div class="painel-registro">
+                <button ng-click="pCtrl.opcaoLoginSelecionada(2)">
+                    <span class="texto-login">Registre-se</span>
+                </button>
+            </div>
+        </div>
+        <div ng-show="pCtrl.loginEmailSelecionado">
+            <div class="alert alert-danger alert-dismissible" role="alert" ng-show="pCtrl.mensagemErro">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <span >{{pCtrl.mensagemErro}}</span>
+            </div>
+            
+            <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input" ng-class="{'input-nao-informado': pCtrl.emailObrigatorio === true}"/>
+            <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input" ng-class="{'input-nao-informado': pCtrl.senhaObrigatorio === true}"/>
+            <div class="checkbox">
+                <label class="texto-login">
+                    <input type="checkbox" ng-model="pCtrl.lembrarEmail">Lembrar senha
+                </label>
+            </div>
+            <button ng-click="pCtrl.autenticar(0)" class="login-email">
+                    <span class="glyphicon glyphicon-log-in icone-botao" aria-hidden="true"></span>
+                    <span class="texto-login">Login</span>
+                </button>
+            <div class="col-md-6 linha">
+                <span class="texto-login link" ng-click="pCtrl.esqueciSenha()">Esqueci a senha</span>
+            </div>
+            <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
+                    <span class="texto-login">Voltar</span>
+                </button>
+        </div>
+        <div ng-show="pCtrl.loginFacebookSelecionado">
+            <div class="alert alert-danger alert-dismissible" role="alert" ng-show="pCtrl.mensagemErro">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <span >{{pCtrl.mensagemErro}}</span>
+            </div>
+            <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input" ng-class="{'input-nao-informado': pCtrl.nomeObrigatorio === true}"/>
+            <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input" ng-class="{'input-nao-informado': pCtrl.emailObrigatorio === true}"/>
+            <div class="checkbox">
+                <label class="texto-login">
+                    <input type="checkbox" ng-model="noWrapSlides" ng-model="pCtrl.lembrarSenha">Lembrar senha
+                </label>
+            </div>
+            <button ng-click="pCtrl.autenticar(1)" class="login-facebook">
+                <span class="glyphicon glyphicon-log-in icone-botao" aria-hidden="true"></span>
+                <span class="texto-login">Login</span>
+            </button>
+            <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
+                <span class="texto-login">Voltar</span>
             </button>
         </div>
-        <div class="login-separador">
-            <span class="texto-login" >ou</span>
-        </div>
-        <div>
-            <button class="login-facebook" ng-click="pCtrl.opcaoLoginSelecionada(1)">
-                <div >
-                    <img src="./app/assets/img/facebook-6-32.png" class="fb-icon"/>
-                    <span>Entrar com o facebook</span>
-                </div>
+        <div ng-show="pCtrl.loginRegistroSelecionado">
+            <div class="col-md-6 linha">
+                <span class="glyphicon glyphicon-user titulo"></span>
+                <span class="titulo">Registro</span>
+            </div>
+            <div class="alert alert-danger alert-dismissible" role="alert" ng-show="pCtrl.mensagemErroRegistro">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <span >{{pCtrl.mensagemErroRegistro}}</span>
+            </div>
+            <input type="text" placeholder="Nome" ng-model="pCtrl.nome" class="input" ng-class="{'input-nao-informado': pCtrl.nomeObrigatorio === true}"
+            />
+            <input type="text" placeholder="Telefone" ng-model="pCtrl.telefone" class="input" ng-class="{'input-nao-informado': pCtrl.telefoneObrigatorio === true}"
+            />
+            <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input" ng-class="{'input-nao-informado': pCtrl.emailObrigatorio === true}"
+            />
+            <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input" ng-class="{'input-nao-informado': pCtrl.senhaObrigatorio === true}"
+            />
+            <input type="password" placeholder="Confirmação da senha" ng-model="pCtrl.confirmacaoSenha" class="input" ng-class="{'input-nao-informado': pCtrl.confirmacaoSenhaObrigatorio === true}"
+            />
+            <button ng-click="pCtrl.registrar()" class="registro">
+                <span class="glyphicon glyphicon-ok icone-botao" aria-hidden="true"></span>
+                <span class="texto-login">Registrar</span>
+            </button>
+            <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
+                <span class="texto-login">Voltar</span>
             </button>
         </div>
-        <div class="painel-mensagem-registro">
-            <span class="texto-login">Não possui uma conta?</span>
-            <br/>
-        </div>
-        <div class="painel-registro">
-            <button ng-click="pCtrl.opcaoLoginSelecionada(2)">
-                <span class="texto-login">Registre-se</span>
-            </button>
-        </div>
-    </div>
-    <div ng-show="pCtrl.loginEmailSelecionado">
-        <label ng-model="pCtrl.mensagemErro" style="color: red"></label>
-        <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input"/>
-        <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input"/>
-
-        <button ng-click="pCtrl.autenticar(0)" class="login-email">
-            <span class="glyphicon glyphicon-log-in icone-botao" aria-hidden="true"></span>
-            <span class="texto-login">Login</span>
-        </button>
-
-        <span class="texto-login" ng-click="pCtrl.esqueciSenha()">Esqueci a senha</span>
-
-        <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
-            <span class="texto-login">Voltar</span>
-        </button>
-    </div>
-    <div ng-show="pCtrl.loginFacebookSelecionado">
-        <label ng-model="pCtrl.mensagemErro" style="color: red"></label>
-        <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input"/>
-        <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input"/>
-        <button ng-click="pCtrl.autenticar(1)" class="login-facebook">
-            <span class="glyphicon glyphicon-log-in icone-botao" aria-hidden="true"></span>
-            <span class="texto-login">Login</span>
-        </button>
-        <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
-            <span class="texto-login">Voltar</span>
-        </button>
-    </div>
-    <div ng-show="pCtrl.loginRegistroSelecionado">
-        <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
-            <span class="texto-login">Voltar</span>
-        </button>
-    </div>
     </center>
 </div>

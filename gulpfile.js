@@ -55,8 +55,9 @@ gulp.task("consolidar-dependencias", ["limpar-diretorio-output"], function () {
         path.join(dirNodeModules, "angular/angular.min.js"),
         path.join(dirNodeModules, "angular-ui-router/release/angular-ui-router.js"),
         path.join(dirNodeModules, "angular-ui-bootstrap/dist/ui-bootstrap.js"),
+        path.join(dirNodeModules, "angular-spinkit/build/angular-spinkit.min.js"),
         path.join(dirNodeModules, "ngmap/build/scripts/ng-map.min.js"),
-        path.join(dirNodeModules, "angular-animate/angular-animate.min.js")
+        path.join(dirNodeModules, "angular-animate/angular-animate.min.js"),
         // path.join(dirNodeModules, "angular-material/angular-material.min.js")
         ])
         .pipe(concat("dependencias.js"))
@@ -77,7 +78,8 @@ gulp.task("copiar-ui-bootstrap", ["limpar-diretorio-output"], function () {
 
 gulp.task("consolidar-estilos-dependencia", ["limpar-diretorio-output-css"], function () {
     var thirdPartyCSS = [
-        path.join(dirNodeModules, "angular-ui-bootstrap/dist/ui-bootstrap-csp.css")
+        path.join(dirNodeModules, "angular-ui-bootstrap/dist/ui-bootstrap-csp.css"),
+        path.join(dirNodeModules, "angular-spinkit/src/angular-spinkit.css")
     ];
 
     return gulp.src(thirdPartyCSS)
