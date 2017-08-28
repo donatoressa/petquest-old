@@ -41,10 +41,14 @@
         <label ng-model="pCtrl.mensagemErro" style="color: red"></label>
         <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input"/>
         <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input"/>
+
         <button ng-click="pCtrl.autenticar(0)" class="login-email">
             <span class="glyphicon glyphicon-log-in icone-botao" aria-hidden="true"></span>
             <span class="texto-login">Login</span>
         </button>
+
+        <span class="texto-login" ng-click="pCtrl.esqueciSenha()">Esqueci a senha</span>
+
         <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
             <span class="texto-login">Voltar</span>
         </button>

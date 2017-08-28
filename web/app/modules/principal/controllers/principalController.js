@@ -19,6 +19,7 @@
         vm.mensagemErro = "";
         vm.opcaoLoginSelecionada = opcaoLoginSelecionada;
         vm.voltarInicio = voltarInicio;
+        vm.esqueciSenha = esqueciSenha;
 
         function autenticar(tipoLogin) {
             //API DE LOGIN
@@ -70,6 +71,10 @@
             vm.loginFacebookSelecionado = false;
             vm.loginRegistroSelecionado = false;
             vm.exibirOpcoesLogin = true;
+        }
+
+        function esqueciSenha(){
+            
         }
     }
 
