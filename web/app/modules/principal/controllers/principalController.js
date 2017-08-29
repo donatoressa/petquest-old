@@ -3,9 +3,9 @@
 
     angular.module("petquest.principal").controller("principalController", principalController);
 
-    principalController.$inject = ["$state", "login", "registro"];
+    principalController.$inject = ["$state", "login", "registro", "localStorageService"];
 
-    function principalController($state, login, registro) {
+    function principalController($state, login, registro, localStorageService) {
         var vm = this;
         vm.exibirOpcoesLogin = true;
         vm.loginEmailSelecionado = false;
@@ -14,21 +14,25 @@
         vm.processando = false;
         vm.mensagemErro = "";
         vm.lembrarEmail = false;
+        vm.lembrarFB = false;
 
         vm.autenticar = autenticar;
         vm.registrar = registrar;
         vm.opcaoLoginSelecionada = opcaoLoginSelecionada;
         vm.voltarInicio = voltarInicio;
         vm.esqueciSenha = esqueciSenha;
+        vm.getLocalStorage = getLocalStorage;
 
         function autenticar(tipoLogin) {
-            //API DE LOGIN
-            if (vm.lembrarEmail) {
-                // localStorageService.set(usuario, senha);
-            }
-
+            
+            //Autenticação por e-mail
             if (tipoLogin === 0) {
                 if (vm.email && vm.senha) {
+
+                    if (vm.lembrarEmail) {
+                        localStorageService.set(vm.email, vm.senha);
+                    }
+
                     vm.processando = true;
                     login.autenticar(vm.email, vm.senha)
                         .then(function (sucesso) {
@@ -47,8 +51,19 @@
                     vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
                 }
             }
+            //Autenticação pelo facebook
             else {
+                if (vm.email && vm.senha) {
 
+                    if (vm.lembrarFB) {
+                        localStorageService.set(vm.email, vm.senha);
+                    }
+                }
+                else {
+                    vm.emailObrigatorio = vm.email ? false : true;
+                    vm.senhaObrigatorio = vm.senha ? false : true;
+                    vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
+                }
             }
         }
 
@@ -94,10 +109,18 @@
             vm.emailObrigatorio = false;
             vm.senhaObrigatorio = false;
             vm.confirmacaoSenhaObrigatorio = false;
+            vm.lembrarEmail = false;
+            vm.lembrarFB = false;
         }
 
         function esqueciSenha() {
 
+        }
+
+        function getLocalStorage() {
+            if (vm.email != "") {
+                vm.senha = localStorageService.get(vm.email);
+            }
         }
 
         function registrar() {

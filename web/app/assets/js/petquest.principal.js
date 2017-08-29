@@ -2,13 +2,13 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit"])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit", "LocalStorageModule"])
         .config(configuracao)
         .run(execucao);
 
-    configuracao.$inject = ["$stateProvider", "$urlRouterProvider"];
+    configuracao.$inject = ["$stateProvider", "$urlRouterProvider", "localStorageServiceProvider"];
 
-    function configuracao($stateProvider, $urlRouterProvider) {
+    function configuracao($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
 
         $urlRouterProvider.otherwise("/");
         $stateProvider
@@ -22,6 +22,8 @@
                 templateUrl: "app/modules/principal/views/login.html",
                 controller: "principalController as pCtrl"
             });
+
+        localStorageServiceProvider.setStorageType("sessionStorage");
 
         console.log("Módulo principal configurado.");
     }
@@ -79,9 +81,9 @@
 
     angular.module("petquest.principal").controller("principalController", principalController);
 
-    principalController.$inject = ["$state", "login", "registro"];
+    principalController.$inject = ["$state", "login", "registro", "localStorageService"];
 
-    function principalController($state, login, registro) {
+    function principalController($state, login, registro, localStorageService) {
         var vm = this;
         vm.exibirOpcoesLogin = true;
         vm.loginEmailSelecionado = false;
@@ -90,21 +92,25 @@
         vm.processando = false;
         vm.mensagemErro = "";
         vm.lembrarEmail = false;
+        vm.lembrarFB = false;
 
         vm.autenticar = autenticar;
         vm.registrar = registrar;
         vm.opcaoLoginSelecionada = opcaoLoginSelecionada;
         vm.voltarInicio = voltarInicio;
         vm.esqueciSenha = esqueciSenha;
+        vm.getLocalStorage = getLocalStorage;
 
         function autenticar(tipoLogin) {
-            //API DE LOGIN
-            if (vm.lembrarEmail) {
-                // localStorageService.set(usuario, senha);
-            }
-
+            
+            //Autenticação por e-mail
             if (tipoLogin === 0) {
                 if (vm.email && vm.senha) {
+
+                    if (vm.lembrarEmail) {
+                        localStorageService.set(vm.email, vm.senha);
+                    }
+
                     vm.processando = true;
                     login.autenticar(vm.email, vm.senha)
                         .then(function (sucesso) {
@@ -123,8 +129,19 @@
                     vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
                 }
             }
+            //Autenticação pelo facebook
             else {
+                if (vm.email && vm.senha) {
 
+                    if (vm.lembrarFB) {
+                        localStorageService.set(vm.email, vm.senha);
+                    }
+                }
+                else {
+                    vm.emailObrigatorio = vm.email ? false : true;
+                    vm.senhaObrigatorio = vm.senha ? false : true;
+                    vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
+                }
             }
         }
 
@@ -170,10 +187,18 @@
             vm.emailObrigatorio = false;
             vm.senhaObrigatorio = false;
             vm.confirmacaoSenhaObrigatorio = false;
+            vm.lembrarEmail = false;
+            vm.lembrarFB = false;
         }
 
         function esqueciSenha() {
 
+        }
+
+        function getLocalStorage() {
+            if (vm.email != "") {
+                vm.senha = localStorageService.get(vm.email);
+            }
         }
 
         function registrar() {
@@ -238,15 +263,10 @@ angular
 
             var caminho = appSettings.comunicacao.apis + "/autenticar";
             var dados = { "email": email, "senha": senha };
-            var header = {
-                "Access-Control-Allow-Origin": true,
-                "Content-Type": "application/json"
-            };
             var config = {
                 method: "post",
                 url: caminho,
-                data: dados,
-                headers: header
+                data: dados
             };
 
             return interpretador.executarRequisicao(config);

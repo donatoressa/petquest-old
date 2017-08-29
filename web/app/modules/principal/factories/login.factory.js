@@ -13,15 +13,10 @@
 
             var caminho = appSettings.comunicacao.apis + "/autenticar";
             var dados = { "email": email, "senha": senha };
-            var header = {
-                "Access-Control-Allow-Origin": true,
-                "Content-Type": "application/json"
-            };
             var config = {
                 method: "post",
                 url: caminho,
-                data: dados,
-                headers: header
+                data: dados
             };
 
             return interpretador.executarRequisicao(config);
