@@ -16,6 +16,17 @@
             </ul>
         </nav>
     </div>
+    <!--<div petquest-menu="fechado" menu-habilitado="true"></div>-->
+    <!--<center>-->
+        <!--<div class="alert alert-success" role="alert" ng-show="!hCtrl.erroConexao && hCtrl.mensagem != ''">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            <span>{{hCtrl.mensagem}}</span>
+        </div>-->
+        <!--<div class="alert alert-danger" role="alert" ng-show="hCtrl.erroConexao && hCtrl.mensagem != ''">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            <span>{{hCtrl.mensagem}}</span>
+        </div>-->
+    <!--</center>-->
     <div class="mapa" ng-show="!hCtrl.erroConexao">
         <ng-map id="map" class="mapa" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="hCtrl.callbackFunc('you')"
             default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }"></ng-map>

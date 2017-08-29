@@ -33,6 +33,107 @@
     }
 
 })();
+
+(function () {
+
+    "use strict";
+
+    angular.module("petquest.principal").constant("appSettings", {
+        comunicacao: {
+            apis: "http://localhost:3000"
+        }
+    });
+
+})();
+angular
+.module("petquest.principal")
+.directive("splashScreen", ["$timeout", function($timeout){
+    return {
+        restrict : "E",
+        templateUrl: "./app/modules/principal/views/splash.html",
+        link : function(scope, elem, attr){
+            // fade it out for 300 milliseconds (see css)
+            elem.addClass("_splash_fade_out");
+
+            // remove splash screen after animation is completed
+            $timeout(function(){
+                elem.remove();
+                scope = elem = attr = null;
+            }, 2000);
+        }
+    };
+}]);
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("login", login);
+    login.$inject = ["appSettings", "interpretador"];
+
+    function login(appSettings, interpretador) {
+        return {
+            autenticar: autenticar
+        };
+
+        function autenticar(email, senha) {
+
+            var caminho = appSettings.comunicacao.apis + "/autenticar";
+            var dados = { "email": email, "senha": senha };
+            var config = {
+                method: "post",
+                url: caminho,
+                data: dados
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+
+        function autenticarFB() {
+
+            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
+            var config = {
+                method: "get",
+                url: caminho
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("registro", registro);
+    registro.$inject = ["appSettings", "interpretador"];
+
+    function registro(appSettings, interpretador) {
+        return {
+            registrar: registrar
+        };
+
+        function registrar(nome, telefone, email, senha) {
+
+            var caminho = appSettings.comunicacao.apis + "/registrar-usuario";
+            var dados = { 
+                nome: nome,
+                telefone: telefone,
+                email: email, 
+                senha: senha 
+            };
+            var header = {
+                "Access-Control-Allow-Origin": true,
+                "Content-Type": "application/json"
+            };
+            var config = {
+                method: "post",
+                url: caminho,
+                data: dados,
+                headers: header
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+})();
 (function () {
     "use strict";
 
@@ -139,21 +240,7 @@
             }
             //Autenticação pelo facebook
             else {
-                // if (vm.email && vm.senha) {
-
-                    // if (vm.lembrarFB) {
-                    //     localStorageService.set(vm.email, vm.senha);
-                    // }
-
-                    
-
-
-                // }
-                // else {
-                //     vm.emailObrigatorio = vm.email ? false : true;
-                //     vm.senhaObrigatorio = vm.senha ? false : true;
-                //     vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
-                // }
+                
             }
         }
 
@@ -240,106 +327,5 @@
             }
         }
     }
-
-})();
-angular
-.module("petquest.principal")
-.directive("splashScreen", ["$timeout", function($timeout){
-    return {
-        restrict : "E",
-        templateUrl: "./app/modules/principal/views/splash.html",
-        link : function(scope, elem, attr){
-            // fade it out for 300 milliseconds (see css)
-            elem.addClass("_splash_fade_out");
-
-            // remove splash screen after animation is completed
-            $timeout(function(){
-                elem.remove();
-                scope = elem = attr = null;
-            }, 2000);
-        }
-    };
-}]);
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("login", login);
-    login.$inject = ["appSettings", "interpretador"];
-
-    function login(appSettings, interpretador) {
-        return {
-            autenticar: autenticar
-        };
-
-        function autenticar(email, senha) {
-
-            var caminho = appSettings.comunicacao.apis + "/autenticar";
-            var dados = { "email": email, "senha": senha };
-            var config = {
-                method: "post",
-                url: caminho,
-                data: dados
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-
-        function autenticarFB() {
-
-            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
-            var config = {
-                method: "get",
-                url: caminho
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-})();
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("registro", registro);
-    registro.$inject = ["appSettings", "interpretador"];
-
-    function registro(appSettings, interpretador) {
-        return {
-            registrar: registrar
-        };
-
-        function registrar(nome, telefone, email, senha) {
-
-            var caminho = appSettings.comunicacao.apis + "/registrar-usuario";
-            var dados = { 
-                nome: nome,
-                telefone: telefone,
-                email: email, 
-                senha: senha 
-            };
-            var header = {
-                "Access-Control-Allow-Origin": true,
-                "Content-Type": "application/json"
-            };
-            var config = {
-                method: "post",
-                url: caminho,
-                data: dados,
-                headers: header
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-})();
-
-(function () {
-
-    "use strict";
-
-    angular.module("petquest.principal").constant("appSettings", {
-        comunicacao: {
-            apis: "http://localhost:3000"
-        }
-    });
 
 })();

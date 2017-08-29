@@ -1,20 +1,16 @@
 <div>
-    <div class="modal-header">
+    <div class="modal-header titulo-modal">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        <span>Erro</span>
     </div>
     <div class="container">
-        <div class="row">
-            <span class="glyphicons glyphicon-error"></span>
-        </div>
-        <div class="row">
-            <span class="titulo-modal">Erro</span>
-        </div>
-        <div class="row">
-            <span class="texto-modal">Falha de conexão. Tente novamente.</span>
+        <div class="texto-modal">
+            <span>Falha de conexão. Tente novamente.</span>
         </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer texto-modal">
         <button class="btn btn-default botao-modal" ng-click="mCtrl.acaoOK()">
-            <span class="texto-modal">OK</span>
+            <span>OK</span>
         </button>
     </div>
 </div>
