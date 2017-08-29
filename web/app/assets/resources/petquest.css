@@ -25,6 +25,11 @@ body{
 
 .navbar-petquest{
     background-color: #343541;
+    position: relative;
+    min-height: 50px;
+    border: 1px solid transparent;
+    margin-bottom: 0px;
+    padding-right: 5%;
 }
 
 button{
@@ -205,6 +210,12 @@ splash-screen{
         padding-top: 5%;
         padding-bottom: 4%;
         text-decoration: none;
+    }
+
+    .icone-menu-superior{
+        font-size: 180%;
+        padding-left: 1%;
+
     }
 
     .titulo{

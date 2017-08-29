@@ -23,8 +23,8 @@
                 <span class="texto-login">ou</span>
             </div>
             <div>
-                <button class="login-facebook" ng-click="pCtrl.opcaoLoginSelecionada(1)">
-                    <div >
+                <button class="login-facebook" ng-click="pCtrl.autenticar(1)"> <!-- ng-click="pCtrl.opcaoLoginSelecionada(1)">-->
+                    <div>
                         <img src="./app/assets/img/facebook-6-32.png" class="fb-icon"/>
                         <span>Entrar com o facebook</span>
                     </div>
@@ -45,12 +45,13 @@
         <div ng-show="pCtrl.loginEmailSelecionado">
             <div class="alert alert-danger alert-dismissible" role="alert" ng-show="pCtrl.mensagemErro">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                <span >{{pCtrl.mensagemErro}}</span>
+                <span>{{pCtrl.mensagemErro}}</span>
             </div>
-            
-            <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input" ng-class="{'input-nao-informado': pCtrl.emailObrigatorio === true}"/>
-            <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input" 
-                ng-class="{'input-nao-informado': pCtrl.senhaObrigatorio === true}" ng-focus="pCtrl.getLocalStorage()"/>
+
+            <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input" ng-class="{'input-nao-informado': pCtrl.emailObrigatorio === true}"
+            />
+            <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input" ng-class="{'input-nao-informado': pCtrl.senhaObrigatorio === true}"
+                ng-focus="pCtrl.getLocalStorage()" />
             <div class="checkbox">
                 <label class="texto-login">
                     <input type="checkbox" ng-model="pCtrl.lembrarEmail">Lembrar senha
@@ -69,27 +70,28 @@
         </div>
 
         <!-- AUTENTICAÇÃO FACEBOOK -->
-        <div ng-show="pCtrl.loginFacebookSelecionado">
-            <div class="alert alert-danger alert-dismissible" role="alert" ng-show="pCtrl.mensagemErro">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                <span >{{pCtrl.mensagemErro}}</span>
-            </div>
-            <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input" ng-class="{'input-nao-informado': pCtrl.nomeObrigatorio === true}"/>
-            <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input" 
-                ng-class="{'input-nao-informado': pCtrl.emailObrigatorio === true}" ng-focus="pCtrl.getLocalStorage()"/>
-            <div class="checkbox">
-                <label class="texto-login">
+        <!--<div ng-show="pCtrl.loginFacebookSelecionado">
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-show="pCtrl.mensagemErro">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        <span>{{pCtrl.mensagemErro}}</span>
+    </div>
+    <input type="text" placeholder="E-mail" ng-model="pCtrl.email" class="input" ng-class="{'input-nao-informado': pCtrl.nomeObrigatorio === true}"
+    />
+    <input type="password" placeholder="Senha" ng-model="pCtrl.senha" class="input" ng-class="{'input-nao-informado': pCtrl.emailObrigatorio === true}"
+        ng-focus="pCtrl.getLocalStorage()" />
+    <div class="checkbox">
+        <label class="texto-login">
                     <input type="checkbox" ng-model="pCtrl.lembrarFB">Lembrar senha
                 </label>
-            </div>
-            <button ng-click="pCtrl.autenticar(1)" class="login-facebook">
+    </div>
+    <button ng-click="pCtrl.autenticar(1)" class="login-facebook">
                 <span class="glyphicon glyphicon-log-in icone-botao" aria-hidden="true"></span>
                 <span class="texto-login">Login</span>
             </button>
-            <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
+    <button ng-click="pCtrl.voltarInicio()" class="botao-voltar">
                 <span class="texto-login">Voltar</span>
             </button>
-        </div>
+</div>-->
 
         <!-- REGISTRO -->
         <div ng-show="pCtrl.loginRegistroSelecionado">
@@ -99,7 +101,7 @@
             </div>
             <div class="alert alert-danger alert-dismissible" role="alert" ng-show="pCtrl.mensagemErroRegistro">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                <span >{{pCtrl.mensagemErroRegistro}}</span>
+                <span>{{pCtrl.mensagemErroRegistro}}</span>
             </div>
             <input type="text" placeholder="Nome" ng-model="pCtrl.nome" class="input" ng-class="{'input-nao-informado': pCtrl.nomeObrigatorio === true}"
             />

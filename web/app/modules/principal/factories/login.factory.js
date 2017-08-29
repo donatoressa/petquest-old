@@ -21,5 +21,16 @@
 
             return interpretador.executarRequisicao(config);
         }
+
+        function autenticarFB() {
+
+            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
+            var config = {
+                method: "get",
+                url: caminho
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
     }
 })();

@@ -33,45 +33,53 @@
     }
 
 })();
-
-(function () {
-
-    "use strict";
-
-    angular.module("petquest.principal").constant("appSettings", {
-        comunicacao: {
-            apis: "http://localhost:3000"
-        }
-    });
-
-})();
 (function () {
     "use strict";
 
     angular.module("petquest.principal").controller("homeController", homeController);
 
-    homeController.$inject = ["NgMap"];
+    homeController.$inject = ["NgMap", "modal"];
 
-    function homeController(NgMap) {
+    function homeController(NgMap, modal) {
 
         var vm = this;
+        vm.mensagem = "";
+        vm.erroConexao = false;
+
         vm.carregarEventos = carregarEventos;
         vm.abrirMenu = abrirMenu;
+        vm.exibirModalErroConexao = exibirModalErroConexao;
 
-        NgMap.getMap("map").then(function (map) {
-            vm.map = map;
-        });
+        vm.processando = true;
+        NgMap.getMap("map")
+            .then(function (map) {
+                vm.map = map;
+                vm.processando = false;
+                vm.erroConexao = false;
+                vm.mensagem = "  ONLINE - Conectado";
+            })
+            .catch(function (erro) {
+                vm.processando = false;
+                vm.erroConexao = true;
+                vm.mensagem = "  OFFLINE - Sem conexão."; // Alterar para modal
+                exibirModalErroConexao();
+            });
+
         vm.callbackFunc = function (param) {
             console.log('I know where ' + param + ' are. ' + vm.message);
             console.log('You are at' + vm.map.getCenter());
         };
 
-        function carregarEventos(){
+        function carregarEventos() {
 
         }
 
-        function abrirMenu(){
-            
+        function abrirMenu() {
+
+        }
+
+        function exibirModalErroConexao() {
+            modal.exibirModalErro("Erro de conexão. Tente novamente.");
         }
     }
 
@@ -102,7 +110,7 @@
         vm.getLocalStorage = getLocalStorage;
 
         function autenticar(tipoLogin) {
-            
+
             //Autenticação por e-mail
             if (tipoLogin === 0) {
                 if (vm.email && vm.senha) {
@@ -112,16 +120,16 @@
                     }
 
                     vm.processando = true;
-                    login.autenticar(vm.email, vm.senha)
-                        .then(function (sucesso) {
+                    // login.autenticar(vm.email, vm.senha)
+                    //     .then(function (sucesso) {
                             vm.mensagemErro = "";
                             vm.processando = false;
                             $state.go("home");
-                        })
-                        .catch(function (erro) {
-                            vm.mensagemErro = "Erro ao autenticar usuário.";
-                            vm.processando = false;
-                        });
+                        // })
+                        // .catch(function (erro) {
+                        //     vm.mensagemErro = "Erro ao autenticar usuário.";
+                        //     vm.processando = false;
+                        // });
                 }
                 else {
                     vm.emailObrigatorio = vm.email ? false : true;
@@ -131,17 +139,21 @@
             }
             //Autenticação pelo facebook
             else {
-                if (vm.email && vm.senha) {
+                // if (vm.email && vm.senha) {
 
-                    if (vm.lembrarFB) {
-                        localStorageService.set(vm.email, vm.senha);
-                    }
-                }
-                else {
-                    vm.emailObrigatorio = vm.email ? false : true;
-                    vm.senhaObrigatorio = vm.senha ? false : true;
-                    vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
-                }
+                    // if (vm.lembrarFB) {
+                    //     localStorageService.set(vm.email, vm.senha);
+                    // }
+
+                    
+
+
+                // }
+                // else {
+                //     vm.emailObrigatorio = vm.email ? false : true;
+                //     vm.senhaObrigatorio = vm.senha ? false : true;
+                //     vm.mensagemErro = "Um ou mais campos obrigatórios não foram preenchidos.";
+                // }
             }
         }
 
@@ -271,6 +283,17 @@ angular
 
             return interpretador.executarRequisicao(config);
         }
+
+        function autenticarFB() {
+
+            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
+            var config = {
+                method: "get",
+                url: caminho
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
     }
 })();
 (function () {
@@ -307,4 +330,16 @@ angular
             return interpretador.executarRequisicao(config);
         }
     }
+})();
+
+(function () {
+
+    "use strict";
+
+    angular.module("petquest.principal").constant("appSettings", {
+        comunicacao: {
+            apis: "http://localhost:3000"
+        }
+    });
+
 })();

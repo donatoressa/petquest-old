@@ -1,22 +1,23 @@
-<div class="main">
-    <nav class="navbar navbar-default ">
-        <div class="navbar-petquest">
+    <div class="loader" ng-show="hCtrl.processando">
+        <three-bounce-spinner></three-bounce-spinner>
+    </div>
+    <div class="main">
+        <nav class="navbar-petquest">
             <ul class="navbar-nav">
                 <li class="texto-navbar">
-                    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-menu-hamburger icone-menu-superior" aria-hidden="true" ng-click="hCtrl.abrirMenu()"></span>
                 </li>
                 <li class="col-md-2 texto-navbar titulo">
                     <span> Pet Quest </span>
                 </li>
                 <li class="col-md-2 texto-navbar">
-                    <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-th-large icone-menu-superior" aria-hidden="true"></span>
                 </li>
             </ul>
-        </div>
-    </nav>
-</div>
-<div class="mapa">
-    <ng-map id="map" class="mapa" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="vm.callbackFunc('you')"
-        default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }"></ng-map>
-</div>
+        </nav>
+    </div>
+    <div class="mapa" ng-show="!hCtrl.erroConexao">
+        <ng-map id="map" class="mapa" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="hCtrl.callbackFunc('you')"
+            default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }"></ng-map>
+    </div>
 </div>
