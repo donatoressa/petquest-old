@@ -94,26 +94,9 @@
 
         function abrirMenu() {
             
-            var menuInstance = $aside.open({
-                templateUrl: "./app/modules/comum/templates/menu.html",
-                controller: "AsideCtrl",
-                placement: "left",
-                size: "lg"
-            });
-            // vm.visivel = true;
-            // e.stopPropagation();
         }
 
         function fecharMenu() {
-            vm.visivel = false;
-        }
-
-        $rootScope.$on("documentClicked", fecharMenu());
-
-        function _fechar(){
-            vm.$apply(function(){
-                vm.fecharMenu();
-            });
         }
 
         function exibirModalErroConexao() {
