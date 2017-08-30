@@ -24,63 +24,50 @@
 
     "use strict";
 
-    angular.module("petquest.comum").directive("petquestMenu", petquestMenu);
+    angular.module("petquest.comum").directive("petquestMenuItem", petquestMenuItem);
 
-    petquestMenu.$inject = ["$rootScope"];
-
-    function petquestMenu($rootScope) {
-
-        menuController.$inject = ["$scope"];
-
+    function petquestMenuItem(){
         return {
-            restrict: "A",
-            template: "<div ng-swipe-left=\"movimentoFecharMenu()\" ng-swipe-right=\"movimentoAbrirMenu()\" ng-transclude></div>",
+            restrict: "E",
+            template: "<div ng-click='navigate()' ng-transclude></div>",
             transclude: true,
             scope: {
-                posicao: "@petquestMenu",
-                habilitado: "@menuHabilitado"
+                hash: "@"
             },
-            controller: menuController
+            link: function($scope){
+                $scope.navigate = function(){
+                    window.location.hash = $scope.hash;
+                };
+            }
         };
+    }
 
-        function menuController($scope) {
-            $scope.movimentoFecharMenu = movimentoFecharMenu;
-            $scope.movimentoAbrirMenu = movimentoAbrirMenu;
+})();
+(function () {
 
-            if ($scope.posicao == "fechado") {
-                adicionarClassesMenuFechado();
-            }
-            else if ($scope.posicao == "aberto") {
-                adicionarClassesMenuAberto();
-            }
-            else {
-                throw new Error("Deve ser utilizada uma das opções: \"aberto\" ou \"fechado\".");
-            }
+    "use strict";
 
-            function adicionarClassesMenuFechado() {
-                $rootScope.navegacaoClass = "navegacao-movimento";
-                $rootScope.conteudoClass = "";
-                $rootScope.menuConteudoClass = "menu-conteudo-fechado-class";
-            }
+    angular.module("petquest.comum").directive("petquestMenu", petquestMenu);
 
-            function adicionarClassesMenuAberto() {
-                $rootScope.navegacaoClass = "";
-                $rootScope.conteudoClass = "conteudo-movimento";
-                $rootScope.menuConteudoClass = "menu-conteudo-aberto-class";
-            }
+    function petquestMenu() {
 
-            function movimentoFecharMenu() {
-                if ($scope.habilitado !== "false") {
-                    adicionarClassesMenuFechado();
-                }
-            }
-
-            function movimentoAbrirMenu() {
-                if ($scope.habilitado !== "false") {
-                    adicionarClassesMenuAberto();
-                }
-            }
-        }
+        return {
+            restrict: "E",
+            scope: false,
+            controller: function () {
+                var self = this;
+                this.abrirMenu = function () {
+                    self.aberto = true;
+                };
+                this.fecharMenu = function () {
+                    self.aberto = false;
+                };
+            },
+            controllerAs: "menuCtrl",
+            replace: true,
+            templateUrl: "web/app/modules/comum/templates/menu.html",
+            transclude: true
+        };
     }
 })();
 (function(){

@@ -2,11 +2,12 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit", "LocalStorageModule"])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit", "LocalStorageModule", "ngAside"])
         .config(configuracao)
         .run(execucao);
 
     configuracao.$inject = ["$stateProvider", "$urlRouterProvider", "localStorageServiceProvider"];
+    execucao.$inject = ["$rootScope"];
 
     function configuracao($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
 
@@ -28,7 +29,10 @@
         console.log("Módulo principal configurado.");
     }
 
-    function execucao() {
+    function execucao($rootScope) {
+        document.addEventListener("click", function(e){
+            $rootScope.$broadcast("documentClicked", e.target);
+        });
         console.log("Módulo principal executado.");
     }
 

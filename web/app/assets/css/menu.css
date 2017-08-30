@@ -1,8 +1,7 @@
-.menu {
-    width: 40%;
-    height: 100%;
-    top: 0px;
-    left: 0px;
-    background-color: #0066CC;
-    border-right: 1px #fff;
+petquest-menu {
+    position: fixed;
+}
+
+petquest-menu-aberto {
+    width: 200px;
 }

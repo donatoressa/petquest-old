@@ -2,11 +2,12 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit", "LocalStorageModule"])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit", "LocalStorageModule", "ngAside"])
         .config(configuracao)
         .run(execucao);
 
     configuracao.$inject = ["$stateProvider", "$urlRouterProvider", "localStorageServiceProvider"];
+    execucao.$inject = ["$rootScope"];
 
     function configuracao($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
 
@@ -28,7 +29,10 @@
         console.log("Módulo principal configurado.");
     }
 
-    function execucao() {
+    function execucao($rootScope) {
+        document.addEventListener("click", function(e){
+            $rootScope.$broadcast("documentClicked", e.target);
+        });
         console.log("Módulo principal executado.");
     }
 
@@ -45,110 +49,23 @@
     });
 
 })();
-angular
-.module("petquest.principal")
-.directive("splashScreen", ["$timeout", function($timeout){
-    return {
-        restrict : "E",
-        templateUrl: "./app/modules/principal/views/splash.html",
-        link : function(scope, elem, attr){
-            // fade it out for 300 milliseconds (see css)
-            elem.addClass("_splash_fade_out");
-
-            // remove splash screen after animation is completed
-            $timeout(function(){
-                elem.remove();
-                scope = elem = attr = null;
-            }, 2000);
-        }
-    };
-}]);
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("login", login);
-    login.$inject = ["appSettings", "interpretador"];
-
-    function login(appSettings, interpretador) {
-        return {
-            autenticar: autenticar
-        };
-
-        function autenticar(email, senha) {
-
-            var caminho = appSettings.comunicacao.apis + "/autenticar";
-            var dados = { "email": email, "senha": senha };
-            var config = {
-                method: "post",
-                url: caminho,
-                data: dados
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-
-        function autenticarFB() {
-
-            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
-            var config = {
-                method: "get",
-                url: caminho
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-})();
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("registro", registro);
-    registro.$inject = ["appSettings", "interpretador"];
-
-    function registro(appSettings, interpretador) {
-        return {
-            registrar: registrar
-        };
-
-        function registrar(nome, telefone, email, senha) {
-
-            var caminho = appSettings.comunicacao.apis + "/registrar-usuario";
-            var dados = { 
-                nome: nome,
-                telefone: telefone,
-                email: email, 
-                senha: senha 
-            };
-            var header = {
-                "Access-Control-Allow-Origin": true,
-                "Content-Type": "application/json"
-            };
-            var config = {
-                method: "post",
-                url: caminho,
-                data: dados,
-                headers: header
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-})();
 (function () {
     "use strict";
 
     angular.module("petquest.principal").controller("homeController", homeController);
 
-    homeController.$inject = ["NgMap", "modal"];
+    homeController.$inject = ["NgMap", "modal", "$rootScope", "$aside"];
 
-    function homeController(NgMap, modal) {
+    function homeController(NgMap, modal, $rootScope, $aside) {
 
         var vm = this;
         vm.mensagem = "";
         vm.erroConexao = false;
+        vm.visivel = false;
 
         vm.carregarEventos = carregarEventos;
         vm.abrirMenu = abrirMenu;
+        vm.fecharMenu = fecharMenu;
         vm.exibirModalErroConexao = exibirModalErroConexao;
 
         vm.processando = true;
@@ -157,12 +74,12 @@ angular
                 vm.map = map;
                 vm.processando = false;
                 vm.erroConexao = false;
-                vm.mensagem = "  ONLINE - Conectado";
+                // vm.mensagem = "  ONLINE - Conectado";
             })
             .catch(function (erro) {
                 vm.processando = false;
                 vm.erroConexao = true;
-                vm.mensagem = "  OFFLINE - Sem conexão."; // Alterar para modal
+                // vm.mensagem = "  OFFLINE - Sem conexão."; // Alterar para modal
                 exibirModalErroConexao();
             });
 
@@ -176,7 +93,27 @@ angular
         }
 
         function abrirMenu() {
+            
+            var menuInstance = $aside.open({
+                templateUrl: "./app/modules/comum/templates/menu.html",
+                controller: "AsideCtrl",
+                placement: "left",
+                size: "lg"
+            });
+            // vm.visivel = true;
+            // e.stopPropagation();
+        }
 
+        function fecharMenu() {
+            vm.visivel = false;
+        }
+
+        $rootScope.$on("documentClicked", fecharMenu());
+
+        function _fechar(){
+            vm.$apply(function(){
+                vm.fecharMenu();
+            });
         }
 
         function exibirModalErroConexao() {
@@ -328,4 +265,93 @@ angular
         }
     }
 
+})();
+angular
+.module("petquest.principal")
+.directive("splashScreen", ["$timeout", function($timeout){
+    return {
+        restrict : "E",
+        templateUrl: "./app/modules/principal/views/splash.html",
+        link : function(scope, elem, attr){
+            // fade it out for 300 milliseconds (see css)
+            elem.addClass("_splash_fade_out");
+
+            // remove splash screen after animation is completed
+            $timeout(function(){
+                elem.remove();
+                scope = elem = attr = null;
+            }, 2000);
+        }
+    };
+}]);
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("login", login);
+    login.$inject = ["appSettings", "interpretador"];
+
+    function login(appSettings, interpretador) {
+        return {
+            autenticar: autenticar
+        };
+
+        function autenticar(email, senha) {
+
+            var caminho = appSettings.comunicacao.apis + "/autenticar";
+            var dados = { "email": email, "senha": senha };
+            var config = {
+                method: "post",
+                url: caminho,
+                data: dados
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+
+        function autenticarFB() {
+
+            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
+            var config = {
+                method: "get",
+                url: caminho
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("registro", registro);
+    registro.$inject = ["appSettings", "interpretador"];
+
+    function registro(appSettings, interpretador) {
+        return {
+            registrar: registrar
+        };
+
+        function registrar(nome, telefone, email, senha) {
+
+            var caminho = appSettings.comunicacao.apis + "/registrar-usuario";
+            var dados = { 
+                nome: nome,
+                telefone: telefone,
+                email: email, 
+                senha: senha 
+            };
+            var header = {
+                "Access-Control-Allow-Origin": true,
+                "Content-Type": "application/json"
+            };
+            var config = {
+                method: "post",
+                url: caminho,
+                data: dados,
+                headers: header
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
 })();
