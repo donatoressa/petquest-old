@@ -6,8 +6,7 @@
         <ul class="navbar-nav">
             <li class="texto-navbar">
                 <!--<button snap-toggle="left">-->
-                    <span class="glyphicon glyphicon-menu-hamburger icone-menu-superior" aria-hidden="true"
-                        ng-click="hCtrl.abrirMenu()"></span>
+                <span class="glyphicon glyphicon-menu-hamburger icone-menu-superior" aria-hidden="true" ng-click="hCtrl.abrirMenu()"></span>
                 <!--</button>-->
             </li>
             <li class="col-md-2 texto-navbar titulo">
@@ -26,6 +25,7 @@
 </div>-->
 <div class="mapa" ng-show="!hCtrl.erroConexao">
     <ng-map id="map" class="mapa" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="hCtrl.callbackFunc('you')"
-        default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }"></ng-map>
+        default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }">
+    </ng-map>
 </div>
 </div>

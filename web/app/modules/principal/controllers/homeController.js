@@ -33,7 +33,7 @@
             });
 
         obterGeoLocalizacao();
-        
+
 
         vm.callbackFunc = function (param) {
             // console.log('I know where ' + param + ' are. ' + vm.message);
@@ -51,9 +51,17 @@
                     vm.eventos = retorno.data.eventos;
                     for (var i = 0; i < vm.eventos.length; i++) {
                         var posicao = calcularPosicaoMapa(vm.eventos[i]);
-                        var marcador = new google.maps.Marker({ title: "teste"});
-                        marcador.setPosition(posicao);
-                        marcador.setMap(vm.map);
+                        vm.eventos[i].posicaoAtual = posicao;
+                        var marcador = new google.maps.Marker({
+                            title: "teste",
+                            icon: definirIconeEvento(vm.eventos[i]),
+                            position: posicao,
+                            map: vm.map
+                        });
+                        console.log(marcador);
+                        // marcador.setIcon(definirIconeEvento(vm.eventos[i]));
+                        // marcador.setPosition(posicao);
+                        // marcador.setMap(vm.map);
                     }
                 })
                 .catch(function (erro) {
@@ -80,11 +88,30 @@
         }
 
         function calcularPosicaoMapa(posicaoEvento) {
-            var numMarkers = Math.floor(Math.random() * 4) + 4;
-            var lat = posicaoEvento.latitude + (Math.random() / 100);
-            var long = posicaoEvento.longitude + (Math.random() / 100);
+            var lat = posicaoEvento.latitude;
+            var long = posicaoEvento.longitude;
             var latlng = new google.maps.LatLng(lat, long);
             return latlng;
+        }
+
+        function definirIconeEvento(evento) {
+            switch (evento.tipoEvento) {
+                case 1: {
+                    return { //"./app/assets/img/dog-icon.png";
+                        url: "./app/assets/img/dog-icon.png",
+                        scaledSize: new google.maps.Size(50, 50)
+                    };
+                }
+                case 2: {
+                    return { //"./app/assets/img/cat-icon.png";
+                        url: "./app/assets/img/cat-icon.png",
+                        scaledSize: new google.maps.Size(50, 50)
+                    };
+                }
+                default: {
+                    return "marker-generico";
+                }
+            }
         }
     }
 

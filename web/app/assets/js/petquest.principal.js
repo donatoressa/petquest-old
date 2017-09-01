@@ -59,135 +59,6 @@
     });
 
 })();
-angular
-.module("petquest.principal")
-.directive("splashScreen", ["$timeout", function($timeout){
-    return {
-        restrict : "E",
-        templateUrl: "./app/modules/principal/views/splash.html",
-        link : function(scope, elem, attr){
-            // fade it out for 300 milliseconds (see css)
-            elem.addClass("_splash_fade_out");
-
-            // remove splash screen after animation is completed
-            $timeout(function(){
-                elem.remove();
-                scope = elem = attr = null;
-            }, 2000);
-        }
-    };
-}]);
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("login", login);
-    login.$inject = [ "interpretador"];
-
-    function login(interpretador) {
-        return {
-            autenticar: autenticar,
-            autenticarFB: autenticarFB
-        };
-
-        function autenticar(email, senha) {
-
-            var dados = { email: email, senha: senha };
-            var config = {
-                method: "post",
-                api: "autenticar",
-                data: dados
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-
-        function autenticarFB() {
-
-            var config = {
-                api: "autenticar-facebook",
-                method: "get"
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-})();
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("obterEventos", obterEventos);
-    obterEventos.$inject = ["appSettings", "interpretador"];
-
-    function obterEventos(appSettings, interpretador) {
-        return {
-            consultar: consultar
-        };
-
-        function consultar(dados){
-            var config = {
-                method: "post",
-                api: "obter-lista-eventos-localizacao",
-                data: dados
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-
-})();
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("registro", registro);
-    registro.$inject = ["appSettings", "interpretador"];
-
-    function registro(appSettings, interpretador) {
-        return {
-            registrar: registrar
-        };
-
-        function registrar(nome, telefone, email, senha) {
-
-            var dados = { 
-                nome: nome,
-                telefone: telefone,
-                email: email, 
-                senha: senha 
-            };
-            var config = {
-                method: "post",
-                api: "registrar-usuario",
-                data: dados
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-})();
-(function () {
-    "use strict";
-
-    angular.module("petquest.principal").factory("resetSenha", resetSenha);
-    resetSenha.$inject = ["interpretador"];
-
-    function resetSenha(interpretador) {
-        return {
-            reset: reset
-        };
-
-        function reset(dados) {
-
-            var config = {
-                method: "post",
-                api: "reset-senha",
-                data: dados
-            };
-
-            return interpretador.executarRequisicao(config);
-        }
-    }
-
-})();
 (function () {
     "use strict";
 
@@ -223,7 +94,7 @@ angular
             });
 
         obterGeoLocalizacao();
-        
+
 
         vm.callbackFunc = function (param) {
             // console.log('I know where ' + param + ' are. ' + vm.message);
@@ -241,9 +112,17 @@ angular
                     vm.eventos = retorno.data.eventos;
                     for (var i = 0; i < vm.eventos.length; i++) {
                         var posicao = calcularPosicaoMapa(vm.eventos[i]);
-                        var marcador = new google.maps.Marker({ title: "teste"});
-                        marcador.setPosition(posicao);
-                        marcador.setMap(vm.map);
+                        vm.eventos[i].posicaoAtual = posicao;
+                        var marcador = new google.maps.Marker({
+                            title: "teste",
+                            icon: definirIconeEvento(vm.eventos[i]),
+                            position: posicao,
+                            map: vm.map
+                        });
+                        console.log(marcador);
+                        // marcador.setIcon(definirIconeEvento(vm.eventos[i]));
+                        // marcador.setPosition(posicao);
+                        // marcador.setMap(vm.map);
                     }
                 })
                 .catch(function (erro) {
@@ -270,11 +149,30 @@ angular
         }
 
         function calcularPosicaoMapa(posicaoEvento) {
-            var numMarkers = Math.floor(Math.random() * 4) + 4;
-            var lat = posicaoEvento.latitude + (Math.random() / 100);
-            var long = posicaoEvento.longitude + (Math.random() / 100);
+            var lat = posicaoEvento.latitude;
+            var long = posicaoEvento.longitude;
             var latlng = new google.maps.LatLng(lat, long);
             return latlng;
+        }
+
+        function definirIconeEvento(evento) {
+            switch (evento.tipoEvento) {
+                case 1: {
+                    return { //"./app/assets/img/dog-icon.png";
+                        url: "./app/assets/img/dog-icon.png",
+                        scaledSize: new google.maps.Size(50, 50)
+                    };
+                }
+                case 2: {
+                    return { //"./app/assets/img/cat-icon.png";
+                        url: "./app/assets/img/cat-icon.png",
+                        scaledSize: new google.maps.Size(50, 50)
+                    };
+                }
+                default: {
+                    return "marker-generico";
+                }
+            }
         }
     }
 
@@ -474,6 +372,135 @@ angular
 
         function voltarInicio() {
             $state.go("login");
+        }
+    }
+
+})();
+angular
+.module("petquest.principal")
+.directive("splashScreen", ["$timeout", function($timeout){
+    return {
+        restrict : "E",
+        templateUrl: "./app/modules/principal/views/splash.html",
+        link : function(scope, elem, attr){
+            // fade it out for 300 milliseconds (see css)
+            elem.addClass("_splash_fade_out");
+
+            // remove splash screen after animation is completed
+            $timeout(function(){
+                elem.remove();
+                scope = elem = attr = null;
+            }, 2000);
+        }
+    };
+}]);
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("login", login);
+    login.$inject = [ "interpretador"];
+
+    function login(interpretador) {
+        return {
+            autenticar: autenticar,
+            autenticarFB: autenticarFB
+        };
+
+        function autenticar(email, senha) {
+
+            var dados = { email: email, senha: senha };
+            var config = {
+                method: "post",
+                api: "autenticar",
+                data: dados
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+
+        function autenticarFB() {
+
+            var config = {
+                api: "autenticar-facebook",
+                method: "get"
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("obterEventos", obterEventos);
+    obterEventos.$inject = ["appSettings", "interpretador"];
+
+    function obterEventos(appSettings, interpretador) {
+        return {
+            consultar: consultar
+        };
+
+        function consultar(dados){
+            var config = {
+                method: "post",
+                api: "obter-lista-eventos-localizacao",
+                data: dados
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("registro", registro);
+    registro.$inject = ["appSettings", "interpretador"];
+
+    function registro(appSettings, interpretador) {
+        return {
+            registrar: registrar
+        };
+
+        function registrar(nome, telefone, email, senha) {
+
+            var dados = { 
+                nome: nome,
+                telefone: telefone,
+                email: email, 
+                senha: senha 
+            };
+            var config = {
+                method: "post",
+                api: "registrar-usuario",
+                data: dados
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("resetSenha", resetSenha);
+    resetSenha.$inject = ["interpretador"];
+
+    function resetSenha(interpretador) {
+        return {
+            reset: reset
+        };
+
+        function reset(dados) {
+
+            var config = {
+                method: "post",
+                api: "reset-senha",
+                data: dados
+            };
+
+            return interpretador.executarRequisicao(config);
         }
     }
 
