@@ -2,14 +2,14 @@
 
     "use strict";
 
-    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit", "LocalStorageModule", "ngAside"])
+    angular.module("petquest.principal", ["petquest.comum", "ui.router", "ui.bootstrap", "ngMap", "angular-spinkit", "LocalStorageModule", "snap"])
         .config(configuracao)
         .run(execucao);
 
-    configuracao.$inject = ["$stateProvider", "$urlRouterProvider", "localStorageServiceProvider"];
+    configuracao.$inject = ["$stateProvider", "$urlRouterProvider", "localStorageServiceProvider", "$httpProvider", "SnapConstructorProvider"];
     execucao.$inject = ["$rootScope"];
 
-    function configuracao($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
+    function configuracao($stateProvider, $urlRouterProvider, localStorageServiceProvider, $httpProvider, SnapConstructorProvider) {
 
         $urlRouterProvider.otherwise("/");
         $stateProvider
@@ -25,6 +25,11 @@
             });
 
         localStorageServiceProvider.setStorageType("sessionStorage");
+
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+        SnapConstructorProvider.use(window.Snap);
 
         console.log("Módulo principal configurado.");
     }
@@ -54,34 +59,32 @@
 
     angular.module("petquest.principal").controller("homeController", homeController);
 
-    homeController.$inject = ["NgMap", "modal", "$rootScope", "$aside"];
+    homeController.$inject = ["NgMap", "modal", "interpretador"];
 
-    function homeController(NgMap, modal, $rootScope, $aside) {
+    function homeController(NgMap, modal, interpretador) {
 
         var vm = this;
-        vm.mensagem = "";
         vm.erroConexao = false;
         vm.visivel = false;
-
-        vm.carregarEventos = carregarEventos;
+        vm.dadosMapa = [];
         vm.abrirMenu = abrirMenu;
         vm.fecharMenu = fecharMenu;
         vm.exibirModalErroConexao = exibirModalErroConexao;
-
         vm.processando = true;
+
         NgMap.getMap("map")
             .then(function (map) {
                 vm.map = map;
                 vm.processando = false;
                 vm.erroConexao = false;
-                // vm.mensagem = "  ONLINE - Conectado";
             })
             .catch(function (erro) {
                 vm.processando = false;
                 vm.erroConexao = true;
-                // vm.mensagem = "  OFFLINE - Sem conexão."; // Alterar para modal
                 exibirModalErroConexao();
             });
+
+        carregarEventos();
 
         vm.callbackFunc = function (param) {
             console.log('I know where ' + param + ' are. ' + vm.message);
@@ -89,7 +92,22 @@
         };
 
         function carregarEventos() {
+            var configRequest = {
+                url: "obter-lista-eventos-localizacao",
+                latitude: "",
+                longitude: ""
+            };
 
+            interpretador.executarRequisicao(configRequest)
+                .then(function (retorno) {
+                    var eventos = retorno.eventos;
+
+                    // for(var i = 0; i < eventos.length; i++){
+                    //     dadosMapa.push(calcularDistanciaEvento(eventos[i], posicaoAtual));
+                    // }
+                })
+                .catch(function (erro) {
+                });
         }
 
         function abrirMenu() {
@@ -102,6 +120,8 @@
         function exibirModalErroConexao() {
             modal.exibirModalErro("Erro de conexão. Tente novamente.");
         }
+
+        
     }
 
 })();
@@ -141,16 +161,16 @@
                     }
 
                     vm.processando = true;
-                    // login.autenticar(vm.email, vm.senha)
-                    //     .then(function (sucesso) {
+                    login.autenticar(vm.email, vm.senha)
+                        .then(function (sucesso) {
                             vm.mensagemErro = "";
                             vm.processando = false;
                             $state.go("home");
-                        // })
-                        // .catch(function (erro) {
-                        //     vm.mensagemErro = "Erro ao autenticar usuário.";
-                        //     vm.processando = false;
-                        // });
+                        })
+                        .catch(function (erro) {
+                            vm.mensagemErro = "Erro ao autenticar usuário.";
+                            vm.processando = false;
+                        });
                 }
                 else {
                     vm.emailObrigatorio = vm.email ? false : true;
@@ -160,7 +180,17 @@
             }
             //Autenticação pelo facebook
             else {
-                
+                vm.processando = true;
+                login.autenticarFB()
+                    .then(function (retorno) {
+                        console.log("sucesso facebook");
+                        vm.processando = false;
+                        $state.go("home");
+                    })
+                    .catch(function (erro) {
+                        vm.mensagemErro = "Erro ao autenticar usuário.";
+                        vm.processando = false;
+                    });
             }
         }
 
@@ -275,7 +305,8 @@ angular
 
     function login(appSettings, interpretador) {
         return {
-            autenticar: autenticar
+            autenticar: autenticar,
+            autenticarFB: autenticarFB
         };
 
         function autenticar(email, senha) {

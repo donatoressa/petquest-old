@@ -24,29 +24,6 @@
 
     "use strict";
 
-    angular.module("petquest.comum").directive("petquestMenuItem", petquestMenuItem);
-
-    function petquestMenuItem(){
-        return {
-            restrict: "E",
-            template: "<div ng-click='navigate()' ng-transclude></div>",
-            transclude: true,
-            scope: {
-                hash: "@"
-            },
-            link: function($scope){
-                $scope.navigate = function(){
-                    window.location.hash = $scope.hash;
-                };
-            }
-        };
-    }
-
-})();
-(function () {
-
-    "use strict";
-
     angular.module("petquest.comum").directive("petquestMenu", petquestMenu);
 
     function petquestMenu() {
@@ -86,20 +63,20 @@
 
             var configPreflight = {
                 url: configRequest.url,
-                method: "OPTIONS",
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "POST, GET, PUT, OPTIONS",
-                    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-                    "Content-Type": "application/json"
-                }
+                method: "OPTIONS"
+                // headers: {
+                //     "Access-Control-Allow-Origin": "*",
+                //     "Access-Control-Allow-Methods": "POST, GET, PUT",
+                //     "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+                //     "Content-Type": "application/json"
+                // }
             };
 
-            return $http(configPreflight).then(function(retornoPreflight){
-                $http(configRequest).then(function(retornoRequest){
+            // return $http(configPreflight).then(function(retornoPreflight){
+                return $http(configRequest).then(function(retornoRequest){
                     return retornoRequest;
                 });
-            });
+            // });
         }
     }
 })();

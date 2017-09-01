@@ -10,6 +10,7 @@
     "angular-aside": "^1.4.0",
     "angular-local-storage": "^0.2.7",
     "angular-material": "^1.1.4",
+    "angular-snap": "^1.8.5",
     "angular-spinkit": "^0.3.4",
     "angular-translate": "^2.11.1",
     "angular-ui-bootstrap": "^2.5.0",

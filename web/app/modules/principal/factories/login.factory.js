@@ -6,7 +6,8 @@
 
     function login(appSettings, interpretador) {
         return {
-            autenticar: autenticar
+            autenticar: autenticar,
+            autenticarFB: autenticarFB
         };
 
         function autenticar(email, senha) {

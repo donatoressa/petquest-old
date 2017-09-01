@@ -34,16 +34,16 @@
                     }
 
                     vm.processando = true;
-                    // login.autenticar(vm.email, vm.senha)
-                    //     .then(function (sucesso) {
+                    login.autenticar(vm.email, vm.senha)
+                        .then(function (sucesso) {
                             vm.mensagemErro = "";
                             vm.processando = false;
                             $state.go("home");
-                        // })
-                        // .catch(function (erro) {
-                        //     vm.mensagemErro = "Erro ao autenticar usuário.";
-                        //     vm.processando = false;
-                        // });
+                        })
+                        .catch(function (erro) {
+                            vm.mensagemErro = "Erro ao autenticar usuário.";
+                            vm.processando = false;
+                        });
                 }
                 else {
                     vm.emailObrigatorio = vm.email ? false : true;
@@ -53,7 +53,17 @@
             }
             //Autenticação pelo facebook
             else {
-                
+                vm.processando = true;
+                login.autenticarFB()
+                    .then(function (retorno) {
+                        console.log("sucesso facebook");
+                        vm.processando = false;
+                        $state.go("home");
+                    })
+                    .catch(function (erro) {
+                        vm.mensagemErro = "Erro ao autenticar usuário.";
+                        vm.processando = false;
+                    });
             }
         }
 
