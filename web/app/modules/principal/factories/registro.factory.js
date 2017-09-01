@@ -11,22 +11,16 @@
 
         function registrar(nome, telefone, email, senha) {
 
-            var caminho = appSettings.comunicacao.apis + "/registrar-usuario";
             var dados = { 
                 nome: nome,
                 telefone: telefone,
                 email: email, 
                 senha: senha 
             };
-            var header = {
-                "Access-Control-Allow-Origin": true,
-                "Content-Type": "application/json"
-            };
             var config = {
                 method: "post",
-                url: caminho,
-                data: dados,
-                headers: header
+                api: "registrar-usuario",
+                data: dados
             };
 
             return interpretador.executarRequisicao(config);

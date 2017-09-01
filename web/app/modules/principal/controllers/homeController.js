@@ -3,9 +3,9 @@
 
     angular.module("petquest.principal").controller("homeController", homeController);
 
-    homeController.$inject = ["NgMap", "modal", "interpretador"];
+    homeController.$inject = ["NgMap", "modal", "obterEventos"];
 
-    function homeController(NgMap, modal, interpretador) {
+    function homeController(NgMap, modal, obterEventos) {
 
         var vm = this;
         vm.erroConexao = false;
@@ -31,31 +31,27 @@
         carregarEventos();
 
         vm.callbackFunc = function (param) {
-            console.log('I know where ' + param + ' are. ' + vm.message);
-            console.log('You are at' + vm.map.getCenter());
+            // console.log('I know where ' + param + ' are. ' + vm.message);
+            // console.log('You are at' + vm.map.getCenter());
         };
 
         function carregarEventos() {
-            var configRequest = {
-                url: "obter-lista-eventos-localizacao",
+            var dados = {
                 latitude: "",
                 longitude: ""
             };
 
-            interpretador.executarRequisicao(configRequest)
+            obterEventos.consultar(dados)
                 .then(function (retorno) {
                     var eventos = retorno.eventos;
-
-                    // for(var i = 0; i < eventos.length; i++){
-                    //     dadosMapa.push(calcularDistanciaEvento(eventos[i], posicaoAtual));
-                    // }
                 })
                 .catch(function (erro) {
+
                 });
         }
 
         function abrirMenu() {
-            
+
         }
 
         function fecharMenu() {
@@ -64,8 +60,6 @@
         function exibirModalErroConexao() {
             modal.exibirModalErro("Erro de conexão. Tente novamente.");
         }
-
-        
     }
 
 })();

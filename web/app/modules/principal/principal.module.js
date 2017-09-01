@@ -22,6 +22,11 @@
                 url: "/",
                 templateUrl: "app/modules/principal/views/login.html",
                 controller: "principalController as pCtrl"
+            })
+            .state("resetSenha", {
+                url: "/",
+                templateUrl: "app/modules/principal/views/resetSenha.html",
+                controller: "resetSenhaController as rsCtrl"
             });
 
         localStorageServiceProvider.setStorageType("sessionStorage");

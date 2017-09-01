@@ -2,9 +2,9 @@
     "use strict";
 
     angular.module("petquest.principal").factory("login", login);
-    login.$inject = ["appSettings", "interpretador"];
+    login.$inject = [ "interpretador"];
 
-    function login(appSettings, interpretador) {
+    function login(interpretador) {
         return {
             autenticar: autenticar,
             autenticarFB: autenticarFB
@@ -12,11 +12,10 @@
 
         function autenticar(email, senha) {
 
-            var caminho = appSettings.comunicacao.apis + "/autenticar";
-            var dados = { "email": email, "senha": senha };
+            var dados = { email: email, senha: senha };
             var config = {
                 method: "post",
-                url: caminho,
+                api: "autenticar",
                 data: dados
             };
 
@@ -25,10 +24,9 @@
 
         function autenticarFB() {
 
-            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
             var config = {
-                method: "get",
-                url: caminho
+                api: "autenticar-facebook",
+                method: "get"
             };
 
             return interpretador.executarRequisicao(config);

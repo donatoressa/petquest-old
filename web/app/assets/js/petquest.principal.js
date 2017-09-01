@@ -22,6 +22,11 @@
                 url: "/",
                 templateUrl: "app/modules/principal/views/login.html",
                 controller: "principalController as pCtrl"
+            })
+            .state("resetSenha", {
+                url: "/",
+                templateUrl: "app/modules/principal/views/resetSenha.html",
+                controller: "resetSenhaController as rsCtrl"
             });
 
         localStorageServiceProvider.setStorageType("sessionStorage");
@@ -183,12 +188,11 @@
                 vm.processando = true;
                 login.autenticarFB()
                     .then(function (retorno) {
-                        console.log("sucesso facebook");
                         vm.processando = false;
                         $state.go("home");
                     })
                     .catch(function (erro) {
-                        vm.mensagemErro = "Erro ao autenticar usuário.";
+                        vm.mensagemErro = erro && erro.data && erro.data.mensagem ? erro.data.mensagem : "Erro ao autenticar usuário.";
                         vm.processando = false;
                     });
             }
@@ -241,7 +245,7 @@
         }
 
         function esqueciSenha() {
-
+            $state.go("resetSenha");
         }
 
         function getLocalStorage() {
@@ -259,7 +263,7 @@
                             vm.processando = false;
                         })
                         .catch(function (erro) {
-                            vm.mensagemErroRegistro = "Erro ao registrar usuário.";
+                            vm.mensagemErroRegistro = erro.data.mensagem || "Erro ao registrar usuário.";
                             vm.processando = false;
                         });
                 }
@@ -275,6 +279,52 @@
                 vm.senhaObrigatorio = vm.senha ? false : true;
                 vm.confirmacaoSenhaObrigatorio = vm.confirmacaoSenha ? false : true;
             }
+        }
+    }
+
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").controller("resetSenhaController", resetSenhaController);
+
+    resetSenhaController.$inject = ["$state", "resetSenha"];
+
+    function resetSenhaController($state, resetSenha) {
+        var vm = this;
+        vm.emailObrigatorio = false;
+        vm.email = "";
+        vm.mensagemErroReset = "";
+        vm.sucessoReset = false;
+        vm.processando = false;
+        vm.resetar = resetar;
+        vm.voltarInicio = voltarInicio;
+
+        function resetar() {
+
+            if (vm.email) {
+                vm.mensagemErroReset = "";
+                vm.emailObrigatorio = false;
+                vm.processando = true;
+                return resetSenha.reset({ email: vm.email })
+                    .then(function (retorno) {
+                        vm.sucessoReset = true;
+                        vm.processando = false;
+                    })
+                    .catch(function (erro) {
+                        vm.mensagemErroReset = erro.data.mensagem || "Erro ao resetar senha.";
+                        vm.sucessoReset = false;
+                        vm.processando = false;
+                    });
+            }
+            else {
+                vm.emailObrigatorio = true;
+                vm.mensagemErroReset = "Campo 'E-mail' não preenchido.";
+            }
+        }
+
+        function voltarInicio() {
+            $state.go("login");
         }
     }
 
@@ -301,9 +351,9 @@ angular
     "use strict";
 
     angular.module("petquest.principal").factory("login", login);
-    login.$inject = ["appSettings", "interpretador"];
+    login.$inject = [ "interpretador"];
 
-    function login(appSettings, interpretador) {
+    function login(interpretador) {
         return {
             autenticar: autenticar,
             autenticarFB: autenticarFB
@@ -311,11 +361,10 @@ angular
 
         function autenticar(email, senha) {
 
-            var caminho = appSettings.comunicacao.apis + "/autenticar";
-            var dados = { "email": email, "senha": senha };
+            var dados = { email: email, senha: senha };
             var config = {
                 method: "post",
-                url: caminho,
+                api: "autenticar",
                 data: dados
             };
 
@@ -324,10 +373,9 @@ angular
 
         function autenticarFB() {
 
-            var caminho = appSettings.comunicacao.apis + "/autenticar-facebook";
             var config = {
-                method: "get",
-                url: caminho
+                api: "autenticar-facebook",
+                method: "get"
             };
 
             return interpretador.executarRequisicao(config);
@@ -347,25 +395,43 @@ angular
 
         function registrar(nome, telefone, email, senha) {
 
-            var caminho = appSettings.comunicacao.apis + "/registrar-usuario";
             var dados = { 
                 nome: nome,
                 telefone: telefone,
                 email: email, 
                 senha: senha 
             };
-            var header = {
-                "Access-Control-Allow-Origin": true,
-                "Content-Type": "application/json"
-            };
             var config = {
                 method: "post",
-                url: caminho,
-                data: dados,
-                headers: header
+                api: "registrar-usuario",
+                data: dados
             };
 
             return interpretador.executarRequisicao(config);
         }
     }
+})();
+(function () {
+    "use strict";
+
+    angular.module("petquest.principal").factory("resetSenha", resetSenha);
+    resetSenha.$inject = ["interpretador"];
+
+    function resetSenha(interpretador) {
+        return {
+            reset: reset
+        };
+
+        function reset(dados) {
+
+            var config = {
+                method: "post",
+                api: "reset-senha",
+                data: dados
+            };
+
+            return interpretador.executarRequisicao(config);
+        }
+    }
+
 })();

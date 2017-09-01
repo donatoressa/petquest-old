@@ -56,12 +56,11 @@
                 vm.processando = true;
                 login.autenticarFB()
                     .then(function (retorno) {
-                        console.log("sucesso facebook");
                         vm.processando = false;
                         $state.go("home");
                     })
                     .catch(function (erro) {
-                        vm.mensagemErro = "Erro ao autenticar usuário.";
+                        vm.mensagemErro = erro && erro.data && erro.data.mensagem ? erro.data.mensagem : "Erro ao autenticar usuário.";
                         vm.processando = false;
                     });
             }
@@ -114,7 +113,7 @@
         }
 
         function esqueciSenha() {
-
+            $state.go("resetSenha");
         }
 
         function getLocalStorage() {
@@ -132,7 +131,7 @@
                             vm.processando = false;
                         })
                         .catch(function (erro) {
-                            vm.mensagemErroRegistro = "Erro ao registrar usuário.";
+                            vm.mensagemErroRegistro = erro.data.mensagem || "Erro ao registrar usuário.";
                             vm.processando = false;
                         });
                 }

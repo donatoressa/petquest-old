@@ -5,10 +5,10 @@
     <nav class="navbar-petquest">
         <ul class="navbar-nav">
             <li class="texto-navbar">
-                <button snap-toggle="left">
+                <!--<button snap-toggle="left">-->
                     <span class="glyphicon glyphicon-menu-hamburger icone-menu-superior" aria-hidden="true"
                         ng-click="hCtrl.abrirMenu()"></span>
-                </button>
+                <!--</button>-->
             </li>
             <li class="col-md-2 texto-navbar titulo">
                 <span> Pet Quest </span>
@@ -19,21 +19,11 @@
         </ul>
     </nav>
 </div>
-<div snap-drawer>
+<!--<div snap-drawer>
     <div snap-content>
         <p>Hello! I'm your main content!</p>
     </div>
-</div>
-<!--<center>-->
-<!--<div class="alert alert-success" role="alert" ng-show="!hCtrl.erroConexao && hCtrl.mensagem != ''">
-            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            <span>{{hCtrl.mensagem}}</span>
-        </div>-->
-<!--<div class="alert alert-danger" role="alert" ng-show="hCtrl.erroConexao && hCtrl.mensagem != ''">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            <span>{{hCtrl.mensagem}}</span>
-        </div>-->
-<!--</center>-->
+</div>-->
 <div class="mapa" ng-show="!hCtrl.erroConexao">
     <ng-map id="map" class="mapa" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="hCtrl.callbackFunc('you')"
         default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }"></ng-map>

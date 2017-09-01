@@ -21,62 +21,27 @@
 
 })();
 (function () {
-
-    "use strict";
-
-    angular.module("petquest.comum").directive("petquestMenu", petquestMenu);
-
-    function petquestMenu() {
-
-        return {
-            restrict: "E",
-            scope: false,
-            controller: function () {
-                var self = this;
-                this.abrirMenu = function () {
-                    self.aberto = true;
-                };
-                this.fecharMenu = function () {
-                    self.aberto = false;
-                };
-            },
-            controllerAs: "menuCtrl",
-            replace: true,
-            templateUrl: "web/app/modules/comum/templates/menu.html",
-            transclude: true
-        };
-    }
-})();
-(function(){
     "use strict";
 
     angular.module("petquest.comum").factory("interpretador", interpretador);
 
-    interpretador.$inject = ["$http"];
+    interpretador.$inject = ["$http", "appSettings"];
 
-    function interpretador($http){
+    function interpretador($http, appSettings) {
         return {
             executarRequisicao: executarRequisicao
         };
 
-        function executarRequisicao(configRequest){
+        function executarRequisicao(configRequest) {
 
-            var configPreflight = {
-                url: configRequest.url,
-                method: "OPTIONS"
-                // headers: {
-                //     "Access-Control-Allow-Origin": "*",
-                //     "Access-Control-Allow-Methods": "POST, GET, PUT",
-                //     "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-                //     "Content-Type": "application/json"
-                // }
+            var config = {
+                url: appSettings.comunicacao.apis + "/" + configRequest.api,
+                method: configRequest.method,
+                data: configRequest.data
             };
-
-            // return $http(configPreflight).then(function(retornoPreflight){
-                return $http(configRequest).then(function(retornoRequest){
-                    return retornoRequest;
-                });
-            // });
+            return $http(config).then(function (retornoRequest) {
+                return retornoRequest;
+            });
         }
     }
 })();
@@ -128,4 +93,31 @@
         }
     }
 
+})();
+(function () {
+
+    "use strict";
+
+    angular.module("petquest.comum").directive("petquestMenu", petquestMenu);
+
+    function petquestMenu() {
+
+        return {
+            restrict: "E",
+            scope: false,
+            controller: function () {
+                var self = this;
+                this.abrirMenu = function () {
+                    self.aberto = true;
+                };
+                this.fecharMenu = function () {
+                    self.aberto = false;
+                };
+            },
+            controllerAs: "menuCtrl",
+            replace: true,
+            templateUrl: "web/app/modules/comum/templates/menu.html",
+            transclude: true
+        };
+    }
 })();
