@@ -28,16 +28,19 @@
             return instanciaModal.result;
         }
 
-        function exibirModal(mensagem){
+        function exibirModal(mensagem, tamanho, caminhoTemplate, dados){
             var instanciaModal = $uibModal.open({
                 animation: true,
-                templateUrl: "./app/modules/comum/templates/modalErro.html",
+                templateUrl: caminhoTemplate,//"./app/modules/comum/templates/modal.html",
                 controller: "modalController",
                 controllerAs: "mCtrl",
-                size: "sm",
+                size: tamanho,
                 resolve: {
                     mensagem: function(){
                         return mensagem;
+                    },
+                    dados: function(){
+                        return dados;
                     }
                 }
             });

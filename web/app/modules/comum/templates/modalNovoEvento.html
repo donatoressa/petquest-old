@@ -1,0 +1,53 @@
+<div>
+    <div class="modal-header titulo-modal">
+        <span class="glyphicon glyphicon-add" aria-hidden="true"></span>
+        <span>{{mCtrl.mensagem}}</span>
+    </div>
+    <div class="container">
+        <div class="texto-modal">
+            <span><b>Tipo de evento:</b></span>
+            <select type="text">
+                <option value="1">Perdido</option>
+                <option value="2">Encontrado</option>
+            </select>
+        </div>
+        <div class="texto-modal">
+            <!--<ui-select ng-model="person.selected" theme="select2" ng-disabled="disabled" style="min-width: 300px;">
+                <ui-select-match placeholder="Categoria">
+                    <img ng-src="{{ $select.selected.icone }}" /> {{$select.selected.descricao}}
+                </ui-select-match>
+                <ui-select-choices repeat="cat in mCtrl.dados.categorias">
+                    <img ng-src="{{ cat.icone }}" />
+                    <div ng-bind-html="cat.descricao | highlight: $select.search" style="display: inline"></div>
+                </ui-select-choices>
+            </ui-select>    -->
+
+            <!--<select>
+                <option value="14">
+                        <span>Cachorro</span>
+                </option>-->
+                <!--<option value="13">
+                    <div><img src="./app/modules/assets/img/013-animals-1.png"/><span>Gato</span></option>
+                <option value="12">
+                    <div><img src="./app/modules/assets/img/012-animals-2.png"/><span>Coruja</span></option>
+                <option value="11">
+                    <img src="./app/modules/assets/img/011-animal.png"/><span>Esquilo</span></option>
+                <option value="10"><img src="./app/modules/assets/img/010-animal-1.png"/><span>Porco / Leitão</span></option>
+                <option value="9"><img src="./app/modules/assets/img/009-animals-3.png"/><span>Tartaruga / Jabuti / Cágado</span></option>
+                <option value="8"><img src="./app/modules/assets/img/008-animal-2.png"/><span>Galo / Galinha</span></option>
+                <option value="7"><img src="./app/modules/assets/img/007-animal-3.png"/><span>Arara / Papagaio / Calopsita</span></option>
+                <option value="6"><img src="./app/modules/assets/img/006-animal-4.png"/><span>Coelho / Chinchila</span></option>
+                <option value="5"><img src="./app/modules/assets/img/005-animals-4.png"/><span>Cobra</span></option>
+                <option value="4"><img src="./app/modules/assets/img/004-animal-5.png"/><span>Iguana / Lagarto</span></option>
+                <option value="3"><img src="./app/modules/assets/img/003-animals.png"/><span>Macaco / Mico</span></option>
+                <option value="2"><img src="./app/modules/assets/img/002-animals-5.png"/><span>Ganso / Pato / Marreco</span></option>
+                <option value="2"><img src="./app/modules/assets/img/001-animals-6.png"/><span>Vaca / Boi / Touro</span></option>-->
+            </select>
+</div>
+</div>
+<div class="modal-footer texto-modal">
+    <button class="btn btn-default botao-modal" ng-click="mCtrl.acaoOK()">
+            <span>OK</span>
+        </button>
+</div>
+</div>

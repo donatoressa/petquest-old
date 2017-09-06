@@ -21,7 +21,7 @@
         default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }" map-type-control="true">
 
         <marker ng-repeat="evento in hCtrl.eventos" id="{{$index}}" position="{{evento.latitude}}, {{evento.longitude}}" on-click="hCtrl.exibirEventos(event, $index)"
-            icon={{evento.icone}}>
+            icon={{evento.pin}}>
         </marker>
         <info-window id="bar-info-window" max-width="200" visible-on-marker="{{$index}}">
             <div ng-non-bindable="">
