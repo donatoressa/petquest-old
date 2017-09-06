@@ -16,15 +16,20 @@
         vm.fecharMenu = fecharMenu;
         vm.exibirModalErroConexao = exibirModalErroConexao;
         vm.processando = true;
+        vm.store = "";
+        vm.exibirEventos = exibirEventos;
+        vm.eventoSelecionado = "";
 
+        var contentString = "<div><img src=\"@\"/><h1>Animal perdido</h1></div>";
         var latitude, longitude = "";
 
         NgMap.getMap("map")
             .then(function (map) {
+                carregarEventos(latitude, longitude);
                 vm.map = map;
                 vm.processando = false;
                 vm.erroConexao = false;
-                carregarEventos(latitude, longitude);
+
             })
             .catch(function (erro) {
                 vm.processando = false;
@@ -33,11 +38,8 @@
             });
 
         obterGeoLocalizacao();
-
-
         vm.callbackFunc = function (param) {
-            // console.log('I know where ' + param + ' are. ' + vm.message);
-            // console.log('You are at' + vm.map.getCenter());
+            console.log("Mapa carregado com sucesso.");
         };
 
         function carregarEventos(lat, long) {
@@ -50,23 +52,22 @@
                 .then(function (retorno) {
                     vm.eventos = retorno.data.eventos;
                     for (var i = 0; i < vm.eventos.length; i++) {
+                        
                         var posicao = calcularPosicaoMapa(vm.eventos[i]);
                         vm.eventos[i].posicaoAtual = posicao;
-                        var marcador = new google.maps.Marker({
-                            title: "teste",
-                            icon: definirIconeEvento(vm.eventos[i]),
-                            position: posicao,
-                            map: vm.map
-                        });
-                        console.log(marcador);
-                        // marcador.setIcon(definirIconeEvento(vm.eventos[i]));
-                        // marcador.setPosition(posicao);
-                        // marcador.setMap(vm.map);
+                        var dadosAdicionais = complementarDadosEvento(vm.eventos[i]);
+                        vm.eventos[i].icone = dadosAdicionais.icone;
+                        vm.eventos[i].categoriaAnimal = dadosAdicionais.categoriaAnimal;
+                        vm.eventos[i].descricaoEvento = vm.eventos[i].tipoEvento === 1 ? "perdido" : "encontrado";
+                        vm.eventos[i].titulo = "Animal " + vm.eventos[i].descricaoEvento;
                     }
                 })
-                .catch(function (erro) {
+                .catch(function (erro) { });
+        }
 
-                });
+        function exibirEventos(evt, id) {
+            vm.eventoSelecionado = vm.eventos[id];
+            vm.map.showInfoWindow.apply(this, [evt, 'bar-info-window']);
         }
 
         function abrirMenu() {
@@ -95,23 +96,99 @@
         }
 
         function definirIconeEvento(evento) {
-            switch (evento.tipoEvento) {
+
+        }
+
+        function complementarDadosEvento(evento) {
+
+            switch (evento.animal) {
                 case 1: {
-                    return { //"./app/assets/img/dog-icon.png";
-                        url: "./app/assets/img/dog-icon.png",
-                        scaledSize: new google.maps.Size(50, 50)
+                    return {
+                        icone: "./app/assets/img/001-animals-6.png",
+                        categoriaAnimal: "Vaca / Boi / Touro"
                     };
                 }
                 case 2: {
-                    return { //"./app/assets/img/cat-icon.png";
-                        url: "./app/assets/img/cat-icon.png",
-                        scaledSize: new google.maps.Size(50, 50)
+                    return {
+                        icone: "./app/assets/img/002-animals-5.png",
+                        categoriaAnimal: "Ganso / Pato / Marreco"
+                    };
+                }
+                case 3: {
+                    return {
+                        icone: "./app/assets/img/003-animals.png",
+                        categoriaAnimal: "Macaco / Mico"
+                    };
+                }
+                case 4: {
+                    return {
+                        icone: "./app/assets/img/004-animal-5.png",
+                        categoriaAnimal: "Iguana / Lagarto"
+                    };
+                }
+                case 5: {
+                    return {
+                        icone: "./app/assets/img/005-animals-4.png",
+                        categoriaAnimal: "Cobra / Serpente"
+                    };
+                }
+                case 6: {
+                    return {
+                        icone: "./app/assets/img/006-animal-4.png",
+                        categoriaAnimal: "Coelho / Chinchila / Hamster"
+                    };
+                }
+                case 7: {
+                    return {
+                        icone: "./app/assets/img/007-animal-3.png",
+                        categoriaAnimal: "Arara / Papagaio"
+                    };
+                }
+                case 8: {
+                    return {
+                        icone: "./app/assets/img/008-animal-2.png",
+                        categoriaAnimal: "Galo / Galinha"
+                    };
+                }
+                case 9: {
+                    return {
+                        icone: "./app/assets/img/009-animals-3.png",
+                        categoriaAnimal: "Tartaruga / Jabuti / Cágado"
+                    };
+                }
+                case 10: {
+                    return {
+                        icone: "./app/assets/img/010-animal-1.png",
+                        categoriaAnimal: "Porco / Leitão"
+                    };
+                }
+                case 11: {
+                    return {
+                        icone: "./app/assets/img/011-animal.png",
+                        categoriaAnimal: "Esquilo"
+                    };
+                }
+                case 12: {
+                    return {
+                        icone: "./app/assets/img/012-animals-2.png",
+                        categoriaAnimal: "Coruja"
+                    };
+                }
+                case 13: {
+                    return {
+                        icone: "./app/assets/img/013-animals-1.png",
+                        categoriaAnimal: "Gato"
                     };
                 }
                 default: {
-                    return "marker-generico";
+                    return {
+                        icone: "./app/assets/img/014-dog.png",
+                        categoriaAnimal: "Cachorro"
+                    };
                 }
             }
+
+            
         }
     }
 
