@@ -4,6 +4,7 @@ var path = require("path");
 var del = require("del");
 var concat = require("gulp-concat");
 var fs = require("fs");
+var shell = require('gulp-shell');
 
 var dirAplicacao = "./web/app";
 var dirNodeModules = "./node_modules";
@@ -111,14 +112,15 @@ gulp.task("consolidar-modulos", ["limpar-diretorio-output"], function () {
 gulp.task("build", [
     "limpar-diretorio-output",
     "limpar-diretorio-output-css",
-    // "limpar-diretorio-output-img",
     "consolidar-dependencias",
     "consolidar-estilos-dependencia",
     "consolidar-modulos",
     "copiar-estilos",
-    // "copiar-angular",
-    // "copiar-ui-bootstrap",
     "analise-estatica"
 ]);
+
+gulp.task("deploy", ["build"], shell.task(["firebase deploy"]));
+
+gulp.task("deploy-hosting", ["build"], shell.task(["firebase deploy --only hosting"]));
 
 gulp.task("default", ["build"]);
