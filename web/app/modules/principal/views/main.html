@@ -1,0 +1,52 @@
+<div class="loader" ng-show="hCtrl.processando">
+    <three-bounce-spinner></three-bounce-spinner>
+</div>
+<div class="main">
+    <nav class="navbar-petquest">
+        <ul class="navbar-nav">
+            <li class="texto-navbar">
+                <span class="glyphicon glyphicon-menu-hamburger icone-menu-superior" aria-hidden="true" ng-click="hCtrl.abrirMenu()"></span>
+            </li>
+            <li class="col-md-2 texto-navbar titulo">
+                <!--<span> Pet Quest </span>-->
+            </li>
+            <li class="col-md-2 texto-navbar">
+                <!--<span class="glyphicon glyphicon-th-large icone-menu-superior" aria-hidden="true"></span>-->
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="mapa" ng-show="!hCtrl.erroConexao">
+    <ng-map id="map" class="mapa" center='current-position' geo-fallback-center="[40.74, -74.18]" geo-callback="hCtrl.callbackFunc('you')"
+        default-style="false" map-type-control-options="{ mapTypeIds: [ROADMAP'] }" map-type-control="true">
+
+        <marker ng-repeat="evento in hCtrl.eventos" id="{{$index}}" position="{{evento.latitude}}, {{evento.longitude}}" on-click="hCtrl.exibirEventos(event, $index)"
+            icon={{evento.pin}}>
+        </marker>
+        <info-window id="bar-info-window" max-width="200" visible-on-marker="{{$index}}">
+            <div ng-non-bindable="">
+                <div id="siteNotice"></div>
+                <div id="bodyContent">
+                    <img src="{{hCtrl.eventoSelecionado.icone}}" />
+                    <span>{{hCtrl.eventoSelecionado.titulo}}</span>
+                    <div>
+                        <span><b>Categoria:</b></span>
+                        <span>{{hCtrl.eventoSelecionado.categoriaAnimal}}</span>
+                    </div>
+                    <div>
+                        <span><b>Fotos:</b></span>
+                    </div>
+                    <div>
+                        <span><b>Descrição anúncio:</b></span>
+                    </div>
+                    <div>
+                        <span><b>Anunciado por:</b></span>
+                        <span><a href="">{{hCtrl.eventoSelecionado.anunciante}}</a></span>
+                    </div>
+                </div>
+            </div>
+        </info-window>
+
+    </ng-map>
+</div>
+</div>

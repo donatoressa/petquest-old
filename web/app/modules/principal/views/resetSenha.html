@@ -1,0 +1,29 @@
+<div class="loader" ng-show="rsCtrl.processando">
+    <three-bounce-spinner></three-bounce-spinner>
+</div>
+<div class="main">
+    <div>
+        <center>
+            <div class="alert alert-danger alert-dismissible" role="alert" ng-show="rsCtrl.mensagemErroReset != ''">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <span>{{rsCtrl.mensagemErroReset}}</span>
+            </div>
+            <div class="alert alert-success alert-dismissible" role="alert" ng-show="rsCtrl.sucessoReset">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <span>Nova senha enviada com sucesso ao e-mail.</span>
+            </div>
+
+            <div><span class="texto-login">Digite o e-mail cadastrado.</span></div>
+            <div><span class="texto-login">Enviaremos o link de recuperação da senha para você.</span></div>
+            <input type="text" placeholder="E-mail" ng-model="rsCtrl.email" class="input" ng-class="{'input-nao-informado': rsCtrl.emailObrigatorio === true}"
+            />
+            <button ng-click="rsCtrl.resetar()" class="registro">
+                    <span class="glyphicon glyphicon-log-in icone-botao" aria-hidden="true"></span>
+                    <span class="texto-login">Enviar</span>
+                </button>
+            <button ng-click="rsCtrl.voltarInicio()" class="botao-voltar">
+                <span class="texto-login">Voltar</span>
+            </button>
+        </center>
+    </div>
+</div>
